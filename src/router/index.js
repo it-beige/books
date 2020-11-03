@@ -50,7 +50,7 @@ export const constantRoutes = [
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
       }
     ]
-  },
+  }
 ]
 
 /* 动态加载路由，根据权限设定来加载，和管理系统的侧边栏对应 */

@@ -6,7 +6,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'vue Element Admin' // page title
+const name = defaultSettings.title || '电子书管理系统' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -28,7 +28,7 @@ module.exports = {
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
-  productionSourceMap: false,
+  productionSourceMap: process.env.NODE_ENV === 'development',
   devServer: {
     port: port,
     open: true,
@@ -39,6 +39,7 @@ module.exports = {
     before: require('./mock/mock-server.js')
   },
   configureWebpack: {
+    devtool: process.env.NODE_ENV === 'development' ? 'source-map' : undefined,
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
     name: name,
@@ -49,8 +50,6 @@ module.exports = {
     }
   },
   chainWebpack(config) {
-    // it can improve the speed of the first screen, it is recommended to turn on preload
-    // it can improve the speed of the first screen, it is recommended to turn on preload
     config.plugin('preload').tap(() => [
       {
         rel: 'preload',
@@ -60,8 +59,6 @@ module.exports = {
         include: 'initial'
       }
     ])
-
-    // when there are many pages, it will cause too many meaningless requests
     config.plugins.delete('prefetch')
 
     // set svg-sprite-loader
@@ -80,6 +77,18 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
       .end()
+
+    // set preserveWhitespace
+    config.module
+    .rule('vue')
+    .use('vue-loader')
+    .loader('vue-loader')
+    .tap(options => {
+      options.compilerOptions.preserveWhitespace = true
+      return options
+    })
+    .end()
+
 
     config
       .when(process.env.NODE_ENV !== 'development',
