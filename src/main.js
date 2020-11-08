@@ -13,6 +13,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
+import Storage from './storage'
 
 import './icons' // icon
 import './permission' // permission control
@@ -37,6 +38,9 @@ Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
   locale: enLang // 如果使用中文，无需设置，请删除
 })
+
+Vue.prototype.sessionStorage = new Storage('sessionStorage')
+Vue.prototype.localStorage = new Storage('localStorage')
 
 // register global utility filters
 Object.keys(filters).forEach(key => {
