@@ -26,14 +26,7 @@ export default {
     }
   },
   mounted() {
-    let userInfo = {
-      name: "ks"
-    };
-   this.localStorage.setItem('userInfo', userInfo)
-   this.localStorage.setItem('age', 18, 'userInfo')
-    // console.log(localStorage.getItem('userInfo'));
-    // localStorage.removeItem()
-    // console.log(localStorage.getItem('book'));
+    
   }
 };
 </script>

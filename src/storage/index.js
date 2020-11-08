@@ -18,7 +18,6 @@ class Storage {
   // 设置
   setItem(key, value, moduleName) {
     if (moduleName) {
-      debugger
       let val = this.getItem(moduleName)
       val[key] = value;
       this.setItem(moduleName, val)
