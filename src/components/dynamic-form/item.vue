@@ -205,7 +205,7 @@ export default {
     }
   },
   watch: {
-    "item.params": { // 传递了params就
+    "item.params": {
       handler(val, oldVal) {
         if (val === undefined && oldVal === undefined) {
           return;
@@ -231,7 +231,6 @@ export default {
      * 根据url获取option
      */
     getAsyncOptions() {
-      console.log(this.item);
       const { optionsUrl, dicType, params } = this.item;
       let data = params;
       if (dicType) {
