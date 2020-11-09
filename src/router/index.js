@@ -7,6 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 export const constantRoutes = [
+  { path: '/A', component: () => import('@/views/test/A')},
   {
     path: '/redirect',
     component: Layout,

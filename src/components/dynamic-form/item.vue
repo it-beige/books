@@ -175,6 +175,7 @@
 import { initData } from "@/api/data";
 import TreeSelect from "@/components/tree-select/index.vue";
 import FormUpload from "@/components/form-upload"
+import { login } from '@/api/user';
 
 export default {
   components: { TreeSelect, FormUpload },
@@ -281,6 +282,7 @@ export default {
      * @param key 绑定对象的key
      */
     handleChangeEvent(val, key) {
+      console.log('val', '------->item');
       this.$emit("input", val);
       this.$emit("changeSelect", val);
     },
@@ -289,6 +291,7 @@ export default {
      * @param key 绑定对象的key
      */
     handleFocusEvent(key) {
+      console.log(key, '----->item');
       this.$emit("handleFocusEvent", key);
     },
     isObjectEqual(obj1, obj2) {

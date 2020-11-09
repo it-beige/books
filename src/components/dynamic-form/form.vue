@@ -20,7 +20,6 @@
           :allDisabled="allDisabled"
           :ref="item.type"
           :item="item"
-          v-bind="item"
           :value="value[item.key]"
           :disabled="disabled"
           :style="{'min-width': columnMinWidth }"
@@ -135,10 +134,12 @@ export default {
       this.setDefaultValue();
     },
     handleInput(val, key) {
+      console.log(val,'----------->form');
       this.$emit("input", { ...this.value, [key]: val });
       this.handlerCascade(val, key);
     },
     changeSelect(key) {
+      console.log(key, '----------------->form');
       this.$emit('changeSelect', key)
     },
     handlerCascade(val, key) {
@@ -191,10 +192,10 @@ export default {
     /**
      *  表单验证提交
      */
-    submitForm(state) {
+    submitForm($el) {
       this.$refs[this.refName].validate(valid => {
         if (valid) {
-          this.handleSubmit();
+          this.handleSubmit($el);
         } else {
           return false;
         }
@@ -221,8 +222,8 @@ export default {
     cancelForm() {
       this.$emit("cancelForm", false);
     },
-    handleSubmit(state) {
-      this.$emit("submit", this.value, state);
+    handleSubmit($el) {
+      this.$emit("submit", this.value, $el);
     },
     formItemHidden(hidden) {
       if (typeof hidden === "boolean") {

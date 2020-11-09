@@ -108,6 +108,7 @@ import DynamicSearch from "@/components/dynamic-search";
 import EditTable from "@/components/edit-table/index";
 import dataTableMixin from "@/mixins/dataTableMixin";
 import { setTimeout } from "timers";
+import { log } from 'util';
 export default {
   name: "dynamicDataBox",
   mixins: [dataTableMixin],
