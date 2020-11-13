@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="login-form">
       <div class="title-container">
-        <h3 class="title">图书管理系统</h3>
+        <h3 class="title">电子书管理系统</h3>
       </div>
       <dynamic-form
         labelWidth="0px"

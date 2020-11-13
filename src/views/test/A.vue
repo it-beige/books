@@ -7,6 +7,7 @@
     :eee="eee"
     @upHot="upHot"
     @blurHandle="blurHanlde"
+    @clickTextHandle="clickTextHandle(213, $event)"
    >
    </B>
  </div>
@@ -15,6 +16,11 @@
  import B from './B'
  export default {
    name:'A',
+   provide() {
+     return {
+       A: this
+     }
+   },
    data() {
      return {
       foo:"北歌",
@@ -29,6 +35,9 @@
    },
    blurHanlde() {
      console.log('谢谢各位支持！');
+   },
+   clickTextHandle(pParms, mParams, $e) {
+     console.log(pParms, mParams, $e);
    }
  }
 }
