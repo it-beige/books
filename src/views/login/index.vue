@@ -5,11 +5,11 @@
         <h3 class="title">电子书管理系统</h3>
       </div>
       <dynamic-form
-        labelWidth="0px"
-        :formConfig="formConfig"
-        v-model="loginForm"
         ref="loginForm"
-        :showBtn="false"
+        v-model="loginForm"
+        label-width="0px"
+        :form-config="formConfig"
+        :show-btn="false"
       >
         <slot name="slot-box">
           <el-form-item prop="password" :rules="passwordRules">
@@ -42,129 +42,132 @@
         style="width:100%;margin-bottom:30px;padding-left: 10x; padding-right: 10px"
         @click.native.prevent="handleLogin"
       >
-        登录</el-button
-      >
+        登录
+      </el-button>
+      <Author />
     </div>
-    <author></author>
   </div>
 </template>
 
 <script>
 // 引入自己二次封装的表单
-import "@/components/dynamic-form";
-import Author from './components/Author.vue'
+import '@/components/dynamic-form'
+import Author from './Author'
 
 export default {
-  name: "Login",
-  components: {Author},
+  name: 'Login',
+  components: { Author },
   data() {
     const validatePassword = (rule, value, callback) => {
-      let testUserNameReg = /^[-!@#$%^&*()_]/g;
+      const testUserNameReg = /^[-!@#$%^&*()_]/g
       if (testUserNameReg.test(value)) {
-        callback(new Error("用户名不能已特殊字符开头"));
+        callback(new Error('用户名不能已特殊字符开头'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
-      passwordRules: [{ required: true, trigger: "blur", message: "密码必填" }],
+      passwordRules: [{ required: true, trigger: 'blur', message: '密码必填' }],
       formConfig: {
         formItemList: [
           {
-            key: "username",
-            type: "input",
-            icon: "user",
-            placeholder: "请输入用户名",
+            key: 'username',
+            type: 'input',
+            icon: 'user',
+            placeholder: '请输入用户名',
             rules: [
-              { required: true, trigger: "blur", message: "请输入正确用户名" },
-              { required: true, trigger: "blur", validator: validatePassword }
+              { required: true, trigger: 'blur', message: '请输入正确用户名' },
+              { required: true, trigger: 'blur', validator: validatePassword }
             ]
           }
         ]
       },
       loginForm: {
-        username: "",
-        password: ""
+        username: 'admin',
+        password: 'admin'
       },
-      passwordType: "password",
+      passwordType: 'password',
       capsTooltip: false,
       loading: false,
       showDialog: false,
       redirect: undefined,
       otherQuery: {}
-    };
+    }
   },
   watch: {
     $route: {
       handler: function(route) {
-        const query = route.query;
+        const query = route.query
         if (query) {
-          this.redirect = query.redirect;
-          this.otherQuery = this.getOtherQuery(query);
+          this.redirect = query.redirect
+          this.otherQuery = this.getOtherQuery(query)
         }
       },
       immediate: true
     }
   },
   mounted() {
-    let userInfo = {
-      name: "ks"
-    };
-   this.localStorage.setItem('userInfo', userInfo)
-   this.localStorage.setItem('age', 18, 'userInfo')
-    if (this.loginForm.username === "") {
-      this.$refs.loginForm.$el[0].focus();
-    } else if (this.loginForm.password === "") {
-      this.$refs.loginForm.$el[1].focus();
+    // this.$nextTick(() => {
+    //   console.log(this.$store)
+    // })
+    const userInfo = {
+      name: 'ks'
+    }
+    this.localStorage.setItem('userInfo', userInfo)
+    this.localStorage.setItem('age', 18, 'userInfo')
+    if (this.loginForm.username === '') {
+      this.$refs.loginForm.$el[0].focus()
+    } else if (this.loginForm.password === '') {
+      this.$refs.loginForm.$el[1].focus()
     }
   },
   methods: {
     checkCapslock(e) {
-      const { key } = e;
-      this.capsTooltip = key && key.length === 1 && key >= "A" && key <= "Z";
+      const { key } = e
+      this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'
     },
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
       this.$refs.loginForm.$refs['dynamicForm'].validate(valid => {
         if (valid) {
-          this.loading = true;
+          this.loading = true
           this.$store
-            .dispatch("user/login", this.loginForm)
+            .dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({
-                path: this.redirect || "/",
+                path: this.redirect || '/',
                 query: this.otherQuery
-              });
-              this.loading = false;
+              })
+              this.loading = false
             })
             .catch(() => {
-              this.loading = false;
-            });
+              this.loading = false
+            })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== "redirect") {
-          acc[cur] = query[cur];
+        if (cur !== 'redirect') {
+          acc[cur] = query[cur]
         }
-        return acc;
-      }, {});
+        return acc
+      }, {})
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

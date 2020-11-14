@@ -6,12 +6,32 @@ Vue.use(Router)
 /* 页面框架 */
 import Layout from '@/layout'
 
+/* errorPage模块 */
+import dashboard from './dashboard'
+
+/* login模块 */
+import login from './login'
+
+/* A模块 */
+import testA from './testA'
+/* B模块 */
+import testB from './testB'
+/* C模块 */
+import testC from './testC'
+/* D模块 */
+import testD from './testD'
+/* E模块 */
+import testE from './testE'
+/* F模块 */
+import testF from './testF'
+/* G模块 */
+import testG from './testG'
+
 export const constantRoutes = [
-  { path: '/A', component: () => import('@/views/test/A')},
   {
     path: '/redirect',
     component: Layout,
-    hidden: true,
+    hidden: true, // 在侧边栏隐藏
     children: [
       {
         path: '/redirect/:path(.*)',
@@ -20,42 +40,41 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
+    path: 'external-link',
+    component: Layout,
+    children: [
+      {
+        path: 'https://github.com/PanJiaChen/vue-element-admin',
+        meta: { title: '项目系列文章', icon: 'link' }
+      }
+    ]
   },
-  {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
-  },
-  {
-    path: '/404',
-    component: () => import('@/views/error-page/404'),
-    hidden: true
-  },
+  ...login,
   {
     path: '/401',
+    name: '401',
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
   {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
-  }
+    path: '/404',
+    name: '404',
+    component: () => import('@/views/error-page/404'),
+    hidden: true
+  },
+  ...dashboard
+
 ]
 
 /* 动态加载路由，根据权限设定来加载，和管理系统的侧边栏对应 */
 export const asyncRoutes = [
+  ...testA,
+  ...testB,
+  ...testC,
+  ...testD,
+  ...testE,
+  ...testF,
+  ...testG,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

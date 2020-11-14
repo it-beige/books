@@ -27,7 +27,7 @@ module.exports = {
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
-  lintOnSave: false,
+  lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: process.env.NODE_ENV === 'development',
   devServer: {
     port: port,
@@ -45,7 +45,12 @@ module.exports = {
     name: name,
     resolve: {
       alias: {
-        '@': resolve('src')
+        '@': resolve('src'),
+        'components': resolve('src/components'),
+        'api': resolve('src/api'),
+        'utils': resolve('src/utils'),
+        'store': resolve('src/store'),
+        'router': resolve('src/router'),
       }
     }
   },
@@ -80,15 +85,14 @@ module.exports = {
 
     // set preserveWhitespace
     config.module
-    .rule('vue')
-    .use('vue-loader')
-    .loader('vue-loader')
-    .tap(options => {
-      options.compilerOptions.preserveWhitespace = true
-      return options
-    })
-    .end()
-
+      .rule('vue')
+      .use('vue-loader')
+      .loader('vue-loader')
+      .tap(options => {
+        options.compilerOptions.preserveWhitespace = true
+        return options
+      })
+      .end()
 
     config
       .when(process.env.NODE_ENV !== 'development',

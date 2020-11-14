@@ -3,41 +3,41 @@
     <div class="title">我是B</div>
     <p>foo:{{ foo }}</p>
     <p @click="clickTextHandle">attrs:{{ $attrs }}</p>
-    <C v-bind="$attrs" v-on="$listeners" @blurHandle="blurHanlde"></C>
+    <C v-bind="$attrs" v-on="$listeners" @blurHandle="blurHanlde" />
   </div>
 </template>
 <script>
-import C from "./C";
+import C from './C'
 export default {
-  name: "B",
+  name: 'B',
+  components: { C },
   inheritAttrs: true,
   //  inject: ['A'],
   inject: {
-    A: {default: {}}
+    A: { default: {}}
   },
-  components: { C },
-  props: ["foo"],
+  props: ['foo'],
   data() {
     return {
-      BAttr: "123"
-    };
-  },
-  methods: {
-    blurHanlde() {
-      console.log("B组件监听到了");
-    },
-    clickTextHandle($e) {
-      let p = { name: 123}
-      console.log($e);
-      let obj = {ev: $e, p}
-      this.$emit('clickTextHandle', obj)
+      BAttr: '123'
     }
   },
   mounted() {
-    console.log(this.$attrs);
-    console.log(this.A, "------------------->B");
+    console.log(this.$attrs)
+    console.log(this.A, '------------------->B')
+  },
+  methods: {
+    blurHanlde() {
+      console.log('B组件监听到了')
+    },
+    clickTextHandle($e) {
+      const p = { name: 123 }
+      console.log($e)
+      const obj = { ev: $e, p }
+      this.$emit('clickTextHandle', obj)
+    }
   }
-};
+}
 </script>
 <style lang="scss">
 .title {

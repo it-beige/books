@@ -10,14 +10,14 @@ $panGreen: #30B08F;
 
 // sidebar
 $menuText:#bfcbd9;
-$menuActiveText:#409EFF;
+$menuActiveText:#fff;
 $subMenuActiveText:#f4f4f5; // https://github.com/ElemeFE/element/issues/12951
 
-$menuBg:#304156;
-$menuHover:#263445;
+$menuBg:#008B8D;
+$menuHover:rgba(102, 197, 199, .68);
 
-$subMenuBg:#1f2d3d;
-$subMenuHover:#001528;
+$subMenuBg:#00787A;
+$subMenuHover: rgba(102, 197, 199, .68);
 
 $sideBarWidth: 210px;
 

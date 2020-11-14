@@ -1,53 +1,56 @@
 <template>
-  <div></div>
+  <div />
 </template>
 
 <script>
 export default {
-  name: "",
-  data() {
-    return {};
-  },
+  name: '',
   components: {},
+  data() {
+    return {}
+  },
+  mounted() {
+    this.handle()
+  },
   methods: {
     handle() {
-      let a = {
+      const a = {
         user: {
           name: 'Beige',
           msg: '欢迎大家加入前端自学驿站互相交流群'
         },
         savoir: [1, 2, 3, 4]
-      };
+      }
 
-      let c = {
+      const c = {
         user: {
           name: 'Beige',
           msg: '欢迎大家加入前端自学驿站互相交流群'
         },
         savoir: [1, 2, 3, 4]
-      };
+      }
 
-      let b = {
+      const b = {
         user: {
           name: '微信号',
           age: 'itBeige'
         },
         savoir: [1, 2, 3, 4]
-      };
-      let isType = (type) => (obj) => Object.prototype.toString.call(obj) === `[object ${type.slice(0, 1).toUpperCase() + type.slice(1)}]`
-      let isObject = isType('Object')
-      let isArray = isType('Array')
+      }
+      const isType = (type) => (obj) => Object.prototype.toString.call(obj) === `[object ${type.slice(0, 1).toUpperCase() + type.slice(1)}]`
+      const isObject = isType('Object')
+      const isArray = isType('Array')
 
       function compareObjVal(obj1, obj2) {
         for (const attr in obj1) {
-          if (!obj1.hasOwnProperty(attr)) return;
-          const a1 = isObject(obj1[attr]) 
+          if (!obj1.hasOwnProperty(attr)) return
+          const a1 = isObject(obj1[attr])
           const a2 = isObject(obj2[attr])
           const arr1 = isArray(obj1)
-          
+
           // 如果是对象继续判断
           if (a1 && a2) {
-            return compareObjVal(obj1[attr], obj2[attr]);
+            return compareObjVal(obj1[attr], obj2[attr])
           }
 
           //  如果是数组判断
@@ -55,19 +58,16 @@ export default {
 
           // 不是对象的就判断数值是否相等
           if (obj1[attr] !== obj2[attr]) {
-            return false;
+            return false
           }
         }
 
-          return true;
+        return true
       }
-      console.log(compareObjVal(a, c));
+      console.log(compareObjVal(a, c))
     }
-  },
-  mounted() {
-    this.handle()
   }
-};
+}
 </script>
 
 <style scoped></style>

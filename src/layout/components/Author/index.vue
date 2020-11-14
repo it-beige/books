@@ -7,26 +7,26 @@
       <img
         width="100%"
         src="http://resource.beige.world/imgs/gongconghao.png"
-      />
+      >
     </div>
     <div class="item">
       <h3 class="title">加入前端自学交流群</h3>
-      <span class="desc"
-        >扫描二维码回复 <span class="inner">加群</span> 学习</span
-      >
-      <img width="100%" src="http://resource.beige.world/imgs/weixin.png" />
+      <span
+        class="desc"
+      >扫描二维码回复 <span class="inner">加群</span> 学习</span>
+      <img width="100%" src="http://resource.beige.world/imgs/weixin.png">
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "rightGroup",
+  name: 'Author',
+  components: {},
   data() {
-    return {};
-  },
-  components: {}
-};
+    return {}
+  }
+}
 </script>
 
 <style scoped lang="scss">
