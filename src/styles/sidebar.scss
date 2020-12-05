@@ -71,6 +71,9 @@
     // menu hover
     .submenu-title-noDropdown,
     .el-submenu__title {
+      i {
+        color: #fff !important;
+      }
       &:hover {
         background-color: $menuHover !important;
       }
@@ -84,7 +87,7 @@
     & .el-submenu .el-menu-item {
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg !important;
-
+     
       &:hover {
         background-color: $subMenuHover !important;
       }

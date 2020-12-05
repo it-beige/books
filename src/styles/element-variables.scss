@@ -3,11 +3,13 @@
 * So I modified the default color and you can modify it to your liking.
 **/
 
+@import './variables';
+
 /* theme color */
-$--color-primary: #1890ff;
-$--color-success: #13ce66;
-$--color-warning: #ffba00;
-$--color-danger: #ff4949;
+$--color-primary: $panGreen;
+$--color-success: $blue;
+$--color-warning: $yellow;
+$--color-danger: $red;
 // $--color-info: #1E1E1E;
 
 $--button-font-weight: 400;

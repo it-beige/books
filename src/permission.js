@@ -1,18 +1,17 @@
 import router from './router'
 import store from './store'
 import { Message } from 'element-ui'
-import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
+import { getToken, closeLoading } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
-
-NProgress.configure({ showSpinner: true }) // NProgress Configuration
+import NProgress from 'nprogress'
+NProgress.configure({ showSpinner: false }) // NProgress Configuration
+import action from '@/shared/action'
 
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
-  NProgress.start()
+  start()
 
   // set page title
   document.title = getPageTitle(to.meta.title)
@@ -24,7 +23,7 @@ router.beforeEach(async(to, from, next) => {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
-      NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
+      done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
@@ -50,7 +49,7 @@ router.beforeEach(async(to, from, next) => {
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
-          NProgress.done()
+          closeLoading()
         }
       }
     }
@@ -63,12 +62,31 @@ router.beforeEach(async(to, from, next) => {
     } else {
       // other pages that do not have permission to access are redirected to the login page.
       next(`/login?redirect=${to.path}`)
-      NProgress.done()
+      closeLoading()
     }
   }
 })
 
+// 启动顶部进度条
+function start() {
+  if (self !== top) {
+    action.postMessage('startProgress')
+  } else {
+    NProgress.start()
+  }
+}
+
+// 关闭顶部进度条
+function done() {
+  if (self !== top) {
+    action.postMessage('doneProgress')
+  } else {
+    NProgress.done()
+  }
+}
+
 router.afterEach(() => {
-  // finish progress bar
-  NProgress.done()
+  done()
+  // 清理loading状态，请注意清理不然一直显示loading
+  closeLoading()
 })

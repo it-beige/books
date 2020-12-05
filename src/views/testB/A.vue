@@ -1,14 +1,6 @@
 <template>
   <div class="A">
-    我是A
-    <B
-      :foo="foo"
-      :coo="coo"
-      :eee="eee"
-      @upHot="upHot"
-      @blurHandle="blurHanlde"
-      @clickTextHandle="clickTextHandle(213, $event)"
-    />
+    <el-button type="primary">我是按钮</el-button>
   </div>
 </template>
 <script>

@@ -13,3 +13,12 @@ export function setToken(token) {
 export function removeToken() {
   return Cookies.remove(TokenKey)
 }
+
+// 清除首屏加载的loading
+export function closeLoading() {
+  const loading = document.getElementById('app-loading')
+  if (loading) {
+    loading.remove()
+    // document.body.removeChild(loading)
+  }
+}

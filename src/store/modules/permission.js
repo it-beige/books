@@ -67,3 +67,4 @@ export default {
   mutations,
   actions
 }
+
