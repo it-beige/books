@@ -8,11 +8,15 @@
       <span class="qq-svg-container"><svg-icon icon-class="qq" class="icon" /></span>
       QQ
     </div>
+    <div class="sign-btn" @click="gitHubHandleClick('gitBuh')">
+      <span class="github-svg-container"><svg-icon icon-class="github" class="icon" /></span>
+      gitHub
+    </div>
   </div>
 </template>
 
 <script>
-// import openWindow from '@/utils/open-window'
+import openWindow from '@/utils/open-window'
 
 export default {
   name: 'SocialSignin',
@@ -26,12 +30,21 @@ export default {
       // openWindow(url, thirdpart, 540, 540)
     },
     tencentHandleClick(thirdpart) {
-      alert('ok')
       // this.$store.commit('SET_AUTH_TYPE', thirdpart)
-      // const client_id = 'xxxxx'
-      // const redirect_uri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/auth-redirect')
-      // const url = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' + client_id + '&redirect_uri=' + redirect_uri
+      const client_id = 'xxxx' // 05f76b168d4b2550733ffe6fa7b996f9
+      const redirect_uri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/auth-redirect')
+      const url = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' + client_id + '&redirect_uri=' + redirect_uri
       // openWindow(url, thirdpart, 540, 540)
+    },
+    gitHubHandleClick(thirdpart) {
+      // 准备参数
+      // const client_id = 'Iv1.xxxxxx'
+      // // const redirect_uri = encodeURIComponent('http://book.beige.world/#/login')
+      // const redirect_uri = encodeURIComponent('http://localhost:9527/#/login')
+      // const url = 'https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirect_uri
+      // openWindow(url, thirdpart, 540, 540)
+
+      // this.$store.commit('user/SET_AUTH_TYPE', thirdpart)
     }
   }
 }
@@ -50,7 +63,8 @@ export default {
       margin-top: 8px;
     }
     .wx-svg-container,
-    .qq-svg-container {
+    .qq-svg-container,
+    .github-svg-container {
       display: inline-block;
       width: 40px;
       height: 40px;
@@ -66,6 +80,10 @@ export default {
     }
     .qq-svg-container {
       background-color: #6BA2D6;
+      margin-left: 50px;
+    }
+    .github-svg-container {
+      background-color: #bdc3c37a;
       margin-left: 50px;
     }
   }

@@ -1,95 +1,144 @@
-import { initData } from '@/api/data'
-import { getTables } from '@/api/table'
+/* eslint-disable */
+import {initData} from "@/api/dataTable";
 const DEFAULT_PAGE = 1
-const dataTableMixin = {
+const DataTableMixin = {
   data() {
     return {
-      loading: true,
-      url: '',
+      _url: '',
+      _params: {},
+      _query: {},
       page: DEFAULT_PAGE,
-      size: 10,
-      data: [],
-      params: {},
-      query: {},
-      tableHead: [],
-      pageInfo: {
-        total: 0,
-        pageSizes: [10, 20, 50, 1000, 200],
-        offset: 10, // 每页显示多少条
-      },
-      controlBar: ['edit', 'delete', 'refresh', 'column', 'search'],
-      time: 170,
-      isAdd: false,
-      showSearch: true
+      offset: 20,
+      loading: false, // 是否在加载数据
+      list: [], // 数据列表
+      total: 0,
+      _dataField: null
     }
   },
   methods: {
-    async init() {
-      if (!await this.beforeInit()) {
+    objectKeyIsEmpty(obj) {
+      let empty = null
+      let keyRet = ''
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          if (obj[key] === null || obj[key] === '') {
+            delete(obj[key])
+          }
+        }
+      }
+      return obj
+    },
+    /**
+     * 拉取数据
+     * @returns {Promise<any>}
+     */
+    async dataTableInit() {
+      if (!await this.dataTableBeforeInit()) {
         return
       }
       return new Promise((resolve, reject) => {
         this.loading = true
-        // 仅获取数据
-        if (this.url && this.url !== '') {
-          initData(this.url, this.params).then(res => {
-            this.pageInfo.total = res.data.total
-            this.data = res.data.records || res.data
-            setTimeout(() => {
-              this.loading = false
-            }, this.time)
-            resolve(res)
-          }).catch(err => {
-            this.loading = false
-            reject(err)
+        let request = null
+        // 判断是否有挂载$http
+        if (this.$http && this.$http.get) {
+          request = this.$http.get(this._url, {
+            params: this.objectKeyIsEmpty(this._params)
           })
         } else {
-          // 获取表格表头配置，及数据体
-          getTables(this.params).then(res => {
-            this.tableHead = res.data.tableColumn
-            this.pageInfo.total = res.data.totalElements
-            this.data = res.data.content
-            setTimeout(() => {
-              this.loading = false
-            }, this.time)
-            resolve(res)
-          }).catch(err => {
-            this.loading = false
-            reject(err)
-          })
+          request = initData(this._url, this.objectKeyIsEmpty(this._params))
         }
+        request.then(res => {
+          if (res.data && res.data.pageData instanceof Array) {
+            this.list = res.data.pageData
+            this.total = res.data.totalCount
+          } else if (res.data instanceof Array && res.data.length) {
+            this.list = res.data
+            // this.list.forEach(item => {
+            //   res.data.forEach(ele => {
+            //    item.typeName = ele.dicTypeInfo.typeName
+            //   });
+            // });
+          } else {
+            this.list = []
+          }
+          if (this._dataField) {
+            this.list = this.list.map(i => i[this._dataField])
+          }
+          setTimeout(() => {
+            this.loading = false
+          }, 170)
+          resolve(res)
+        }).catch(err => {
+          this.loading = false
+          reject(err)
+        })
       })
     },
-    beforeInit() {
+
+    /**
+     * 初始化参数
+     * @returns {boolean}
+     */
+    dataTableBeforeInit() {
       return true
     },
-    pageChange(val) {
-      // this.page = val - 1
+
+    /**
+     * 翻页
+     * @param val
+     */
+    dataTablePageChange(val) {
       this.page = val
-      this.init()
+      this.dataTableInit()
     },
-    sizeChange(val) {
+
+    /**
+     * 改变每页大小
+     * @param val
+     */
+    dataTableSizeChange(val) {
       this.page = DEFAULT_PAGE
-      this.size = val
-      this.init()
+      this.offset = val
+      this.dataTableInit()
     },
-    dynamicSearch(val, status) {
+
+    /**
+     * 搜索
+     * @param val
+     */
+    dataTableSearch(val, status) {
+      /* 2020/08/13 
+      暂不知道dynamic-search 中search事件关联逻辑，从而修改 此搜索逻辑方法
+      判断 当表单控件被修改时候也触发这个搜索，重置了total造成了分页器不显示
       this.page = DEFAULT_PAGE
-      this.query = val
-      if (!status) this.init()
+      this.total = 0
+      */
+      if (val) {
+        this._query = val
+      }
+      if (!status) {
+        // 2020/08/13 修改逻辑 
+        this.page = DEFAULT_PAGE
+        this.total = 0
+        this.list = [] // 数据列表
+        this.dataTableInit()
+      }
     },
+
     // 重置搜索
-    resetSearch(obj) {
+    dataTableReset(obj) {
       this.query = obj
       this.page = 1
       this.init()
     },
+
+
     // 预防删除第二页最后一条数据时，或者多选删除第二页的数据时，页码错误导致请求无数据
-    dleChangePage(size) {
+    dleTableChangePage(size) {
       if (size === undefined) {
         size = 1
       }
-      if (this.data.length === size && this.page !== DEFAULT_PAGE) {
+      if (this.list.length === size && this.page !== DEFAULT_PAGE) {
         this.page = this.page - 1
       }
     },
@@ -102,20 +151,35 @@ const dataTableMixin = {
             if (i.query.type === 'group-input') {
               const obj = {
                 label: i.label,
-                value: i.property,
+                value: i.property || i.prop
               }
               arr.push(obj)
-            } else {
+            } else if (i.query.type === 'databox') {
               const obj = {
                 type: i.query.type,
                 label: i.label,
-                key: i.property,
-                data: i.query.data,
-                value: i.query.value,
-                filterHeader: i.filterHeader // 为了统一去设置头部筛选框的边距样式
+                key: i.property || i.prop,
+                ...i.query
               }
               if (i.query.hidden !== undefined) {
-                Object.assign(obj, { hidden: i.query.hidden, })
+                Object.assign(obj, { hidden: i.query.hidden })
+              }
+              res.push(obj)
+            } else {
+              const obj = {
+                type: i.query.type,
+                label: i.query.label || i.label,
+                key: i.property || i.prop,
+                data: i.query.data,
+                value: i.query.value,
+                labelKey: i.query.labelKey,
+                valueKey: i.query.valueKey,
+                itemClass: i.query.className,
+                ...i.query
+              }
+             
+              if (i.query.hidden !== undefined) {
+                Object.assign(obj, { hidden: i.query.hidden})
               }
               res.push(obj)
             }
@@ -132,7 +196,8 @@ const dataTableMixin = {
         return res
       }
       return data
-    },
+    }
   }
 }
-export default dataTableMixin
+
+export default DataTableMixin

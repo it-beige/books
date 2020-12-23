@@ -36,12 +36,26 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    proxy: {
+      // '^api': {
+      //   target: 'http://mall-pre.springboot.cn',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '/api': ''
+      //   }
+      // },
+      [process.env.VUE_APP_BASE_API]: {
+        target: 'https://localhost:18082',
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
+      }
+    }
+    // before: require('./mock/mock-server.js') => 不使用mock数据
   },
   configureWebpack: { // source-map
     devtool: process.env.NODE_ENV === 'development' ? 'source-map' : undefined,
-    // provide the app's title in webpack's name field, so that
-    // it can be accessed in index.html to inject the correct title.
     name: name,
     resolve: {
       alias: {

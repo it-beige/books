@@ -43,7 +43,25 @@ const routes = [
           icon: 'list',
           roles: ['admin', 'editor']
         }
-      }
+      },
+      // {
+      //   path: 'delivery',
+      //   name: 'Delivery',
+      //   meta: {
+      //     title: '路由跳转问题',
+      //     icon: 'el-icon-s-opportunity'
+      //   },
+      //   component: () => import('@/views/delivery')
+      // },
+      // {
+      //   path: 'delivery-form',
+      //   name: 'DeliveryForm',
+      //   meta: {
+      //     title: '路由跳转问题-表单',
+      //   },
+      //   hidden: true,
+      //   component: () => import('@/views/delivery/form')
+      // },
     ]
   }
 ]

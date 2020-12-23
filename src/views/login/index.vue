@@ -46,20 +46,31 @@
         >
           登录
         </el-button>
+        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
+          第三方登录
+        </el-button>
       </div>
     </div>
     <Author />
+    <el-dialog title="第三方登录" :visible.sync="showDialog">
+      你也可以扫描右侧二维码关注公号 回复：“电子书管理系统” 获取账号
+      <br>
+      <br>
+      <br>
+      <social-sign />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入自己二次封装的表单
-import '@/components/dynamic-form'
+import '@/components/DynamicForm'
 import Author from './Author'
+import SocialSign from './components/SocialSignin'
 
 export default {
   name: 'Login',
-  components: { Author },
+  components: { Author, SocialSign },
   data() {
     const validatePassword = (rule, value, callback) => {
       const testUserNameReg = /^[-!@#$%^&*()_]/g
@@ -70,6 +81,7 @@ export default {
       }
     }
     return {
+      showDialog: false,
       passwordRules: [{ required: true, trigger: 'blur', message: '密码必填' }],
       formConfig: {
         formItemList: [
@@ -86,15 +98,14 @@ export default {
         ]
       },
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: '',
+        password: ''
       },
       bgImg: require('@/assets/login/bg.png'),
       loginImg: require('@/assets/login/login.png'),
       passwordType: 'password',
       capsTooltip: false,
       loading: false,
-      showDialog: false,
       redirect: undefined,
       otherQuery: {}
     }
@@ -102,30 +113,38 @@ export default {
   watch: {
     $route: {
       handler: function(route) {
-        const query = route.query
-        if (query) {
-          this.redirect = query.redirect
-          this.otherQuery = this.getOtherQuery(query)
+        const execAll = [...window.location.href.matchAll(/\?code=([^#]+)/g)][0]
+        // thirdpart Login
+        if (execAll) {
+          const code = execAll[1]
+          this.loginForm.username = this.$store.getters.name
+          this.loginForm.password = this.$store.getters.password
+          this.$store.dispatch('user/thirdpartLogin', code).then(res => {
+            if (res) {
+              // 跳到主页，不让url上再看到code码
+              window.location.href = window.location.origin
+            }
+          })
+        } else {
+          const query = route.query
+          if (query) {
+            this.redirect = query.redirect
+            this.otherQuery = this.getOtherQuery(query)
+          }
         }
       },
       immediate: true
     }
   },
-  mounted() {
-    // this.$nextTick(() => {
-    //   console.log(this.$store)
-    // })
-    const userInfo = {
-      name: 'ks'
-    }
-    this.localStorage.setItem('userInfo', userInfo)
-    this.localStorage.setItem('age', 18, 'userInfo')
-    if (this.loginForm.username === '') {
-      this.$refs.loginForm.$el[0].focus()
-    } else if (this.loginForm.password === '') {
-      this.$refs.loginForm.$el[1].focus()
-    }
-  },
+  // beforeRouteUpdate(to, form, next) {
+  //   if (form.query && form.query.code) {
+  //     this.$store.dispatch('user/thirdpartLogin', form.query.code)
+  //       .then(res => {
+  //         console.log(res)
+  //       })
+  //   }
+  //   next()
+  // },
   methods: {
     checkCapslock(e) {
       const { key } = e

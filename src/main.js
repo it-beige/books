@@ -1,12 +1,10 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
-
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 
 import Element from 'element-ui'
 import './styles/element-variables.scss'
-import enLang from 'element-ui/lib/locale/lang/en'// 如果使用中文语言包请默认支持，无需额外引入，请删除该依赖
 
 import '@/styles/index.scss' // global css
 
@@ -14,31 +12,29 @@ import App from './App'
 import store from './store'
 import router from './router'
 import Storage from './storage'
+import request from './utils/request'
 
 import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log
+import './utils/tip'
 
 import * as filters from './filters' // global filters
 
-/**
- * If you don't want to use mock-server
- * you want to use MockJs for mock api
- * you can execute: mockXHR()
- *
- * Currently MockJs will be used in the production environment,
- * please remove it before going online ! ! !
- */
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+// global components
+const r = require.context('./components/common', true, /\.vue$/)
+r.keys().forEach(path => {
+  const filePath = path.substr(2)
+  const module = require('./components/common/' + filePath)
+  console.log(module.default.name)
+  Vue.component(module.default.name, module.default)
+})
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
-  locale: enLang // 如果使用中文，无需设置，请删除
 })
 
+Vue.prototype.$http = request
 Vue.prototype.sessionStorage = new Storage('sessionStorage')
 Vue.prototype.localStorage = new Storage('localStorage')
 
@@ -55,3 +51,21 @@ new Vue({
   store,
   render: h => h(App)
 })
+
+// 对全局的错误进行异常监控
+Vue.config.errorHandler = function(err, vm, info) {
+  /* eslint-disable */
+  const {
+	  message, // 异常信息
+	  name, // 异常名称
+	  script, // 异常脚本url
+	  line, // 异常行号
+	  column, // 异常列号
+	  stack // 异常堆栈信息
+  } = err
+
+  // vm为抛出异常的 Vue 实例
+  // info为 Vue 特定的错误信息，比如错误所在的生命周期钩子
+  console.error(message)
+}
+

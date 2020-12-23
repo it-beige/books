@@ -9,6 +9,15 @@
         <a :href="item.link" target="_blank">{{ item.title }}</a>
       </li>
     </ul>
+    <div class="plan">
+      <DynamicForm
+        ref="pageForm"
+        v-model="formModel"
+        label-width="130px"
+        :form-config="baseFormConfig"
+        :show-btn="false"
+      />
+    </div>
 
   </div>
 </template>
@@ -46,5 +55,9 @@ export default {
     border: 2px solid $green;
     border-radius: 50%;
   }
+}
+.plan {
+  width: 80%;
+  margin: 40px;
 }
 </style>

@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, thirdpartLogin, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -25,7 +25,10 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
-  }
+  },
+  SET_AUTH_TYPE: (thirdpartType) => {
+
+  },
 }
 
 const actions = {
@@ -44,6 +47,25 @@ const actions = {
     })
   },
 
+  thirdpartLogin({ commit }, code) {
+    return new Promise((resolve, reject) => {
+      console.log(code)
+      thirdpartLogin({ code }).then(response => {
+        console.log(response)
+        const { data } = response
+        // 重复登录的情况下gitHub不会再次响应数据
+        commit('SET_TOKEN', data.token)
+        setToken(data.token)
+        commit('SET_ROLES', data.roles || data.role)
+        commit('SET_NAME', data.name || data.username)
+        commit('SET_AVATAR', data.avatar)
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -54,7 +76,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { roles, name, username, avatar, introduction } = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -62,7 +84,7 @@ const actions = {
         }
 
         commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
+        commit('SET_NAME', name || username)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
         resolve(data)

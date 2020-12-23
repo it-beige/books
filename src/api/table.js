@@ -9,9 +9,9 @@ export function getTables(params) {
 }
 
 export function del(url, params) {
-    return request({
-      url: url,
-      method: 'delete',
-      params
-    })
-  }
+  return request({
+    url: url,
+    method: 'delete',
+    params
+  })
+}
