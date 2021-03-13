@@ -83,7 +83,8 @@ export default {
       default: 20
     },
     columnMinWidth: {
-      type: String
+      type: String,
+      default: ''
     },
     showSaveBtn: Boolean
   },

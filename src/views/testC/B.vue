@@ -12,9 +12,9 @@ export default {
   name: 'B',
   components: { C },
   inheritAttrs: true,
-  //  inject: ['A'],
+  // inject: ['form'],
   inject: {
-    A: { default: {}}
+    formModel: { default: {}}
   },
   props: ['foo'],
   data() {

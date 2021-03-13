@@ -1,6 +1,6 @@
-import Vue from 'vue';
-import "./src/table.scss"
-import EditDataTable from './src/table';
-Vue.component('edit-data-table', EditDataTable);
+import Vue from 'vue'
+import './src/table.scss'
+import EditDataTable from './src/table'
+Vue.component('EditDataTable', EditDataTable)
 
-export default EditDataTable;
+export default EditDataTable

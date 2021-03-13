@@ -632,3 +632,13 @@ export function batchSetVal(keys, model) {
     this.$set(model, key, model[key])
   })
 }
+
+export function getCookie(name) {
+  const reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
+  const arr = document.cookie.match(reg)
+  if (arr) {
+    return unescape(arr[2])
+  } else {
+    return null
+  }
+}

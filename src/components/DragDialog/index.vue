@@ -2,43 +2,43 @@
 <template>
   <el-dialog
     v-el-DragDialog
-    :enableDrag="enableDrag"
+    v-el-drag-dialog
+    :enable-drag="enableDrag"
     class="popup"
     :visible.sync="dialogShow"
     :width="width"
     :height="height"
     :show-close="false"
     :append-to-body="appendToBody"
-    v-el-drag-dialog
     @close="handleClose"
     @open="handleOpen"
   >
-    <div class="popup-header" :class="{' has-title':title}" slot="title">
-      <template v-if="!$scopedSlots.title" >
-        <div class="popup-title">{{title}}</div>
+    <div slot="title" class="popup-header" :class="{' has-title':title}">
+      <template v-if="!$scopedSlots.title">
+        <div class="popup-title">{{ title }}</div>
         <div class="popup-close-btn" @click="close">
-          <i class="el-icon-close"></i>
+          <i class="el-icon-close" />
         </div>
       </template>
 
       <div v-else class="popup-header">
-        <slot name="title"></slot>
+        <slot name="title" />
       </div>
     </div>
-  
+
     <div class="popup-box">
       <div class="slot-box" :style="{'max-height':maxHeight+'px','min-height': minHeight+'px'}">
-        <slot></slot>
+        <slot />
       </div>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import elDragDialog from "@/directive/el-drag-dialog";
+import elDragDialog from '@/directive/el-drag-dialog'
 
 export default {
-  name: "DragDialog",
+  name: 'DragDialog',
   directives: {
     elDragDialog
   },
@@ -56,7 +56,7 @@ export default {
     },
     width: {
       type: String, // 弹出的宽度
-      default: "80%"
+      default: '80%'
     },
     appendToBody: {
       type: Boolean, // 是否加在body上  多层弹出嵌套勾选
@@ -76,29 +76,29 @@ export default {
   data() {
     return {
       dialogShow: this.show
-    };
+    }
   },
   watch: {
     show(val) {
-      this.dialogShow = val;
+      this.dialogShow = val
     },
     dialogShow(val) {
-      this.$emit("update:show", val);
+      this.$emit('update:show', val)
     }
   },
   methods: {
     handleClose() {
-      this.close();
-      this.$emit("close");
+      this.close()
+      this.$emit('close')
     },
     handleOpen() {
-      this.$emit("handleOpen");
+      this.$emit('handleOpen')
     },
     close() {
-      this.dialogShow = false;
+      this.dialogShow = false
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .popup {

@@ -16,7 +16,7 @@ export function thirdpartLogin(params) {
     params
   })
 }
-
+// 获取用户信息
 export function getInfo(token) {
   return request({
     url: 'user/info',
@@ -25,6 +25,15 @@ export function getInfo(token) {
   })
 }
 
+// 获取用户信息
+export function getCode() {
+  return request({
+    url: 'user/getCode',
+    method: 'post',
+  })
+}
+
+// 登出
 export function logout() {
   return request({
     url: 'user/logout',

@@ -5,8 +5,17 @@
       <div class="form">
         <div class="title-container">
           <h3 class="title">电子书管理系统</h3>
+          <transition
+            enter-active-class="animate__animated animate__tada"
+            leave-active-class="animate__animated animate__bounceOutRigh"
+            :duration="{enter:5000,leave:500}"
+          >
+            <div v-if="codeIcon === 'code2' && isClickLogin" class="text-error">
+              <span>验证码不正确</span>
+            </div>
+          </transition>
         </div>
-        <dynamic-form
+        <DynamicForm
           ref="loginForm"
           v-model="loginForm"
           label-width="0px"
@@ -19,6 +28,7 @@
                 <svg-icon icon-class="password" />
               </span>
               <el-input
+                ref="password"
                 :key="passwordType"
                 v-model="loginForm.password"
                 :type="passwordType"
@@ -36,19 +46,46 @@
                 />
               </span>
             </el-form-item>
+
+            <el-form-item prop="identifyingCode" :rules="codeRules">
+              <el-row :span="24">
+                <el-col :span="12">
+                  <el-form-item prop="identifyingCode">
+                    <span class="svg-container">
+                      <svg-icon :icon-class="codeIcon" :style="styleVar" />
+                    </span>
+                    <el-input
+                      v-model="loginForm.identifyingCode"
+                      placeholder="请输入验证码"
+                    />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12"> <img id="imgCode" :src="codeInfo.codeSrc" alt="看不清？点击刷新" @click="getCode"></el-col>
+              </el-row>
+
+            </el-form-item>
+
+            <el-row :span="24">
+              <el-col :span="12">
+                <el-button
+                  :loading="loading"
+                  type="primary"
+                  style="width:100%;margin-bottom:30px;padding-left: 10x; padding-right: 10px"
+                  @click.native.prevent="handleLogin"
+                >
+                  登录
+                </el-button>
+              </el-col>
+              <el-col :span="12">
+                <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
+                  第三方登录
+                </el-button>
+              </el-col>
+
+            </el-row>
           </slot>
-        </dynamic-form>
-        <el-button
-          :loading="loading"
-          type="primary"
-          style="width:100%;margin-bottom:30px;padding-left: 10x; padding-right: 10px"
-          @click.native.prevent="handleLogin"
-        >
-          登录
-        </el-button>
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          第三方登录
-        </el-button>
+        </DynamicForm>
+
       </div>
     </div>
     <Author />
@@ -63,10 +100,9 @@
 </template>
 
 <script>
-// 引入自己二次封装的表单
-import '@/components/DynamicForm'
 import Author from './Author'
 import SocialSign from './components/SocialSignin'
+import { getCookie } from '@/utils'
 
 export default {
   name: 'Login',
@@ -81,8 +117,15 @@ export default {
       }
     }
     return {
+      isClickLogin: false,
+      styleVar: {
+        '--svgColor': '#889aa4',
+      },
       showDialog: false,
       passwordRules: [{ required: true, trigger: 'blur', message: '密码必填' }],
+      codeRules: [
+        { required: true, trigger: 'blur', message: '验证码必填' }
+      ],
       formConfig: {
         formItemList: [
           {
@@ -94,20 +137,27 @@ export default {
               { required: true, trigger: 'blur', message: '请输入正确用户名' },
               { required: true, trigger: 'blur', validator: validatePassword }
             ]
-          }
+          },
         ]
       },
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: 'admin',
+        identifyingCode: '',
       },
       bgImg: require('@/assets/login/bg.png'),
       loginImg: require('@/assets/login/login.png'),
+      codeInfo: {},
       passwordType: 'password',
       capsTooltip: false,
       loading: false,
       redirect: undefined,
       otherQuery: {}
+    }
+  },
+  computed: {
+    codeIcon({ loginForm: { identifyingCode }, codeInfo }) {
+      return getCookie(codeInfo.codeKey)?.toLowerCase() === identifyingCode?.toLowerCase() ? 'code' : 'code2'
     }
   },
   watch: {
@@ -116,10 +166,14 @@ export default {
         const execAll = [...window.location.href.matchAll(/\?code=([^#]+)/g)][0]
         // thirdpart Login
         if (execAll) {
+          const {
+            dispatch,
+          } = this.$store
           const code = execAll[1]
+          const authType = this.localStorage.getItem('authType')
           this.loginForm.username = this.$store.getters.name
           this.loginForm.password = this.$store.getters.password
-          this.$store.dispatch('user/thirdpartLogin', code).then(res => {
+          dispatch('user/thirdpartLogin', { code, authType }).then(res => {
             if (res) {
               // 跳到主页，不让url上再看到code码
               window.location.href = window.location.origin
@@ -136,15 +190,9 @@ export default {
       immediate: true
     }
   },
-  // beforeRouteUpdate(to, form, next) {
-  //   if (form.query && form.query.code) {
-  //     this.$store.dispatch('user/thirdpartLogin', form.query.code)
-  //       .then(res => {
-  //         console.log(res)
-  //       })
-  //   }
-  //   next()
-  // },
+  async created() {
+    this.getCode()
+  },
   methods: {
     checkCapslock(e) {
       const { key } = e
@@ -160,8 +208,17 @@ export default {
         this.$refs.password.focus()
       })
     },
+
+    async getCode() {
+      const { data } = await this.$store.dispatch('user/getCode')
+      this.codeInfo = data
+    },
+
     handleLogin() {
-      this.$refs.loginForm.$refs['dynamicForm'].validate(valid => {
+      this.isClickLogin = true
+      // 没过验证码校验
+      if (this.codeIcon === 'code2') return
+      this.$refs.loginForm.$refs['DynamicForm'].validate(valid => {
         if (valid) {
           this.loading = true
           this.$store
@@ -225,6 +282,9 @@ $light_gray: #eee;
       background-color: #ffffff;
       text-align: center;
       padding: 0 40px;
+      .form-item {
+        width: 100%;
+      }
     }
   }
 
@@ -247,7 +307,17 @@ $light_gray: #eee;
       font-family: FZLTZHUNHK--GBK1-0;
       font-size: 30px;
       color: $green;
-      margin: 55px 0 55px;
+      margin: 55px 0 35px;
+    }
+    .text-error {
+      position: relative;
+      text-align: center;
+      margin: 0;
+      font-size: 16px;
+      color: #CD5652;
+      height: 24px;
+      overflow: hidden;
+      word-break: break-all;
     }
   }
 
@@ -260,12 +330,20 @@ $light_gray: #eee;
     cursor: pointer;
     user-select: none;
   }
+
 }
+
+.svg-container {
+    color: $dark_gray;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
+  }
 
 .login-container ::v-deep {
   .el-form-item__content {
       display: flex;
-      align-items: center;
+      // align-items: center;
     }
   .svg-container {
     color: $dark_gray;
@@ -275,4 +353,5 @@ $light_gray: #eee;
   }
 
 }
+
 </style>

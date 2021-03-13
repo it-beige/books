@@ -98,7 +98,7 @@ export default {
                     ...props
                   })
                 ])
-              }
+              } 
             },
             default: (props) => {
               if (_this.$scopedSlots[col.prop]) {
@@ -187,6 +187,7 @@ export default {
             type: 'index',
             label: _this.indexConfig.indexName,
             align: 'center',
+            fixed: 'left',
             width: _this.indexConfig.indexWidth,
             index: _this.indexConfig.indexMethod,
           },

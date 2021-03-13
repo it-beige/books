@@ -2,12 +2,12 @@
  * @info 封装Storage
  */
 
-const GLOBAL_MODULE_NAME = 'book';
+const GLOBAL_MODULE_NAME = 'book'
 let cacheStorage = {}
 
 class Storage {
   constructor(type) {
-    this.type = type;
+    this.type = type
   }
 
   // 获取整个模块的storage
@@ -18,11 +18,11 @@ class Storage {
   // 设置
   setItem(key, value, moduleName) {
     if (moduleName) {
-      let val = this.getItem(moduleName)
-      val[key] = value;
+      const val = this.getItem(moduleName)
+      val[key] = value
       this.setItem(moduleName, val)
     } else {
-      let val = this.getStorage()
+      const val = this.getStorage()
       val[key] = value
       window[this.type].setItem(GLOBAL_MODULE_NAME, JSON.stringify(val))
     }
@@ -35,7 +35,7 @@ class Storage {
     }
 
     if (moduleName) {
-      let val = cacheStorage[moduleName]
+      const val = cacheStorage[moduleName]
       if (val) return val[key]
     }
     return cacheStorage[key]
@@ -43,7 +43,7 @@ class Storage {
 
   // 删除
   removeItem(key, moduleName) {
-    let val = this.getStorage();
+    const val = this.getStorage()
     if (moduleName) {
       delete val[moduleName][key]
     } else {

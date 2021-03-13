@@ -19,6 +19,7 @@ export default {
   methods: {
     TopUp() {
       this.$emit('upHot')
+      console.log(this.$listeners)
       console.log('恭喜你上热门了!')
     },
     myBlur() {

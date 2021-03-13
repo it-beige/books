@@ -2,41 +2,36 @@
   <div class="A">
     我是A
     <B
+      ref="AIMPORTB"
       :foo="foo"
       :coo="coo"
       :eee="eee"
-      @upHot="upHot"
-      @blurHandle="blurHanlde"
-      @clickTextHandle="clickTextHandle(213, $event)"
+      :name="name"
+      @handlerClick="handlerClick"
     />
+    <!-- <el-button type="primary" @click="isShow = true">显示弹框</el-button>
+    <BaseDialog :show="isShow" @update:show="(show) => (isShow = show)" /> -->
   </div>
 </template>
 <script>
 import B from './B'
+import BaseDialog from './BaseDialog'
 export default {
   name: 'A',
-  provide() {
-    return {
-      A: this
-    }
-  },
-  components: { B },
+  components: { B, BaseDialog },
   data() {
     return {
-      foo: '北歌',
-      coo: '前端自学驿站',
-      eee: '加微信itbeige: 回复加群，加入这个全栈项目交流群'
+      coo: '1',
+      foo: '1',
+      eee: '1',
+      name: '北歌',
+      isShow: false
     }
   },
   methods: {
-    upHot() {
-      console.log('如果觉得文章不错，请点个赞噢！')
-    },
-    blurHanlde() {
-      console.log('谢谢各位支持！')
-    },
-    clickTextHandle(pParms, mParams, $e) {
-      console.log(pParms, mParams, $e)
+    handlerClick(data, $event) {
+      console.log(data, $event)
+      // callBack(true)
     }
   }
 }

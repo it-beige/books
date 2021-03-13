@@ -1,4 +1,4 @@
-import { login, thirdpartLogin, logout, getInfo } from '@/api/user'
+import { login, thirdpartLogin, logout, getInfo, getCode } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -7,6 +7,7 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
+  authType: '',
   roles: []
 }
 
@@ -26,8 +27,8 @@ const mutations = {
   SET_ROLES: (state, roles) => {
     state.roles = roles
   },
-  SET_AUTH_TYPE: (thirdpartType) => {
-
+  SET_AUTH_TYPE: (state, thirdpartType) => {
+    state.authType = thirdpartType
   },
 }
 
@@ -47,10 +48,9 @@ const actions = {
     })
   },
 
-  thirdpartLogin({ commit }, code) {
+  thirdpartLogin({ commit }, params) {
     return new Promise((resolve, reject) => {
-      console.log(code)
-      thirdpartLogin({ code }).then(response => {
+      thirdpartLogin(params).then(response => {
         console.log(response)
         const { data } = response
         // 重复登录的情况下gitHub不会再次响应数据
@@ -88,6 +88,17 @@ const actions = {
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
         resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  // login code
+  getCode() {
+    return new Promise((resolve, reject) => {
+      getCode().then(response => {
+        resolve(response)
       }).catch(error => {
         reject(error)
       })

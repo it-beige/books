@@ -1,16 +1,24 @@
 <template>
   <div class="social-signup-container">
-    <div class="sign-btn" @click="wechatHandleClick('wechat')">
-      <span class="wx-svg-container"><svg-icon icon-class="wechat" class="icon" /></span>
-      WeChat
-    </div>
+
     <div class="sign-btn" @click="tencentHandleClick('tencent')">
-      <span class="qq-svg-container"><svg-icon icon-class="qq" class="icon" /></span>
+      <span class="qq-svg-container"><svg-icon icon-class="qq" class="icon tencent" /></span>
       QQ
     </div>
-    <div class="sign-btn" @click="gitHubHandleClick('gitBuh')">
-      <span class="github-svg-container"><svg-icon icon-class="github" class="icon" /></span>
+    <div class="sign-btn" @click="gitHubHandleClick('gitHuh')">
+      <span class="github-svg-container"><svg-icon icon-class="github" class="icon gitHuh" /></span>
       gitHub
+    </div>
+    <div class="sign-btn" @click="giteeHandleClick('gitee')">
+      <span class="gitee-svg-container"><svg-icon icon-class="gitee" class="icon gitee" /></span>
+      gitee
+    </div>
+    <div class="sign-btn" @click="baiduHandleClick('baidu')">
+      <span class="baidu-svg-container"><svg-icon icon-class="baidu" class="icon baidu" /></span>
+      百度
+    </div>
+    <div class="sign-btn" @click="wechatHandleClick('oschina')">
+      <span class="oschina-svg-container"><svg-icon icon-class="oschina" class="icon oschina" /></span>
     </div>
   </div>
 </template>
@@ -20,31 +28,47 @@ import openWindow from '@/utils/open-window'
 
 export default {
   name: 'SocialSignin',
+  data() {
+    return {
+      curThirdpart: '', // 第三方应用
+    }
+  },
   methods: {
     wechatHandleClick(thirdpart) {
-      alert('ok')
-      // this.$store.commit('SET_AUTH_TYPE', thirdpart)
-      // const appid = 'xxxxx'
-      // const redirect_uri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/auth-redirect')
-      // const url = 'https://open.weixin.qq.com/connect/qrconnect?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_login#wechat_redirect'
-      // openWindow(url, thirdpart, 540, 540)
+
     },
     tencentHandleClick(thirdpart) {
-      // this.$store.commit('SET_AUTH_TYPE', thirdpart)
-      const client_id = 'xxxx' // 05f76b168d4b2550733ffe6fa7b996f9
-      const redirect_uri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/auth-redirect')
-      const url = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' + client_id + '&redirect_uri=' + redirect_uri
-      // openWindow(url, thirdpart, 540, 540)
+
     },
     gitHubHandleClick(thirdpart) {
       // 准备参数
-      // const client_id = 'Iv1.xxxxxx'
-      // // const redirect_uri = encodeURIComponent('http://book.beige.world/#/login')
-      // const redirect_uri = encodeURIComponent('http://localhost:9527/#/login')
-      // const url = 'https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirect_uri
+      const clientId = 'Iv1.243cc65a0c47f657'
+      const redirectUri = 'http://localhost:9527/login'
+      const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`
+      this.localStorage.setItem('authType', thirdpart)
+      window.location.href = url
+    },
+    giteeHandleClick(thirdpart) {
+      // 准备参数
+      const clientId = 'e9c3233a5e2863c1ac6d82c82e1b64119429bae4c00e7b30e46571ad136f505d'
+      const redirectUri = 'http://localhost:9527/login'
+      const url = `https://gitee.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
+      this.localStorage.setItem('authType', thirdpart)
+      window.location.href = url
       // openWindow(url, thirdpart, 540, 540)
-
-      // this.$store.commit('user/SET_AUTH_TYPE', thirdpart)
+    },
+    baiduHandleClick(thirdpart) {
+      // 准备参数
+      const clientId = 'uEYaSmr5RfS9Gj1MrWiw01jq'
+      const redirectUri = 'http://localhost:9527/login'
+      const url = `https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`
+      this.localStorage.setItem('authType', thirdpart)
+      window.location.href = url
+      // window.open(
+      //   url,
+      //   '_blank',
+      //   'toolbar=no,width=800, height=600'
+      // )
     }
   }
 }
@@ -58,13 +82,15 @@ export default {
       cursor: pointer;
     }
     .icon {
-      color: #fff;
       font-size: 24px;
       margin-top: 8px;
     }
     .wx-svg-container,
     .qq-svg-container,
-    .github-svg-container {
+    .github-svg-container,
+    .gitee-svg-container,
+    .baidu-svg-container,
+    .oschina-svg-container{
       display: inline-block;
       width: 40px;
       height: 40px;
@@ -73,17 +99,28 @@ export default {
       padding-top: 1px;
       border-radius: 4px;
       margin-bottom: 20px;
-      margin-right: 5px;
     }
     .wx-svg-container {
-      background-color: #24da70;
+      // background-color: #24da70;
     }
     .qq-svg-container {
-      background-color: #6BA2D6;
       margin-left: 50px;
     }
     .github-svg-container {
-      background-color: #bdc3c37a;
+      margin-left: 50px;
+    }
+    .gitee-svg-container {
+      margin-left: 50px;
+    }
+    .baidu-svg-container {
+      margin-left: 50px;
+    }
+    .oschina-svg-container {
+
+      .oschina {
+        font-size: 22px;
+        transform: scale(3);
+      }
       margin-left: 50px;
     }
   }

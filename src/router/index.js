@@ -10,11 +10,11 @@ import Layout from '@/layout'
 import login from './login'
 
 /* A模块 */
-// import testA from './testA'
+import testA from './testA'
 /* B模块 */
 // import testB from './testB'
 /* C模块 */
-// import testC from './testC'
+import testC from './testC'
 /* D模块 */
 // import testD from './testD'
 /* E模块 */
@@ -22,7 +22,7 @@ import login from './login'
 /* F模块 */
 // import testF from './testF'
 /* G模块 */
-// import testG from './testG'
+import testG from './testG'
 
 /* 图片模块 */
 import book from './book'
@@ -84,13 +84,13 @@ export const constantRoutes = [
 /* 动态加载路由，根据权限设定来加载，和管理系统的侧边栏对应 */
 export const asyncRoutes = [
   ...book,
-  // ...testA,
+  ...testA,
   // ...testB,
-  // ...testC,
+  ...testC,
   // ...testD,
   // ...testE,
   // ...testF,
-  // ...testG,
+  ...testG,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

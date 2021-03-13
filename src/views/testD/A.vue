@@ -2,6 +2,7 @@
   <div class="A">
     我是A
     <B
+      ref="AIMPORTB"
       :foo="foo"
       :coo="coo"
       :eee="eee"

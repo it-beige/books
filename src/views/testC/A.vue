@@ -1,5 +1,5 @@
 <template>
-  <div class="A">
+  <div class="A" @click="formModelHandler">
     我是A
     <B
       :foo="foo"
@@ -17,7 +17,7 @@ export default {
   name: 'A',
   provide() {
     return {
-      A: this
+      formModel: this.form
     }
   },
   components: { B },
@@ -25,16 +25,24 @@ export default {
     return {
       foo: '北歌',
       coo: '前端自学驿站',
-      eee: '加微信itbeige: 回复加群，加入这个全栈项目交流群'
+      eee: '加微信itbeige: 回复加群，加入这个全栈项目交流群',
+      form: {
+        a: 'a',
+        b: 'b',
+        d: { d1: 'd1' }
+      }
     }
   },
   methods: {
     upHot() {
       console.log('如果觉得文章不错，请点个赞噢！')
     },
-    blurHanlde() {
-      console.log('谢谢各位支持！')
+    formModelHandler() {
+      this.form.a = 'b'
+      this.$set(this.form, 'c', 'c')
+      this.$set(this.form, 'd', { d1: 'd2' })
     },
+    blurHanlde() {},
     clickTextHandle(pParms, mParams, $e) {
       console.log(pParms, mParams, $e)
     }

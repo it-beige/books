@@ -12,7 +12,7 @@
       @click.native="disabled?'':open()"
     />
     <el-button v-else :type="trigger.btnType" :size="trigger.btnSize" @click.native="open()">{{ trigger.title }}</el-button>
-    <drag-dialog
+    <DragDialog
       :show.sync="dataBoxVisible"
       :title="title"
       width="80%"
@@ -23,8 +23,8 @@
       <el-row>
         <el-col :span="18">
           <el-card class="box-card">
-            <dynamic-search :data="tableFilterList(tableHead)" @search="dataTableSearch" />
-            <edit-data-table
+            <DynamicSearch :data="tableFilterList(tableHead)" @search="dataTableSearch" />
+            <EditDataTable
               ref="dataBoxTable"
               :head="tableHead"
               :data.sync="list"
@@ -50,7 +50,7 @@
               <template #indexHeader>
                 序号
               </template>
-            </edit-data-table>
+            </EditDataTable>
           </el-card>
         </el-col>
         <el-col :span="6">
@@ -77,19 +77,19 @@
           </el-card>
         </el-col>
       </el-row>
-    </drag-dialog>
+    </DragDialog>
   </div>
 </template>
 <script>
 import DragDialog from '@/components/DragDialog'
-import DynamicSearch from '@/components/DynamicSearch'
+import DynamicSearch from '@/components/common/DynamicSearch'
 import DataTableMixin from '@/mixins/DataTableMixin'
 export default {
   name: 'DynamicDataBox',
   components: {
     DragDialog,
     DynamicSearch,
-    'edit-data-table': () => import('@/components/EditDataTable')
+    EditDataTable: () => import('@/components/common/EditDataTable')
   },
   mixins: [DataTableMixin],
   props: {

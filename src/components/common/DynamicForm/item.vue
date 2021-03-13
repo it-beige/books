@@ -6,6 +6,9 @@
     :prop="item.key"
     :rules="item.rules"
   >
+    <span v-if="item.icon" class="svg-container">
+      <svg-icon :icon-class="item.icon" />
+    </span>
     <el-input
       v-if="['input','text','password','email','textarea','number'].includes(item.type)"
       v-bind="$attrs"
@@ -164,11 +167,11 @@
 </template>
 <script>
 import { initData } from '@/api/data'
-import TreeSelect from '@/components/TreeSelect/index.vue'
-import FormUpload from '@/components/FormUpload'
+import TreeSelect from '@/components/common/TreeSelect/index.vue'
+import FormUpload from '@/components/common/FormUpload'
 import { getToken } from '@/utils/auth'
-import IconSelect from '@/components/IconSelect/index.vue'
-import ImgUpload from '@/components/ImgUpload'
+import IconSelect from '@/components/common/IconSelect/index.vue'
+import ImgUpload from '@/components/common/ImgUpload'
 
 export default {
   name: 'DynamicFormItem',

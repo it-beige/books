@@ -1,41 +1,41 @@
 <template>
   <div class="B">
-    <div class="title">我是B</div>
-    <p>foo:{{ foo }}</p>
-    <p @click="clickTextHandle">attrs:{{ $attrs }}</p>
-    <C v-bind="$attrs" v-on="$listeners" @blurHandle="blurHanlde" />
+    <div
+      v-for="(item, $i) of list"
+      :key="item.id"
+      class="title"
+      @click="clickHandler(item, $i, $event)"
+    >
+      我是B
+    </div>
+    <p>name:{{ name }}</p>
+    <C />
   </div>
 </template>
+
 <script>
 import C from './C'
 export default {
   name: 'B',
-  components: { C },
-  inheritAttrs: true,
-  //  inject: ['A'],
-  inject: {
-    A: { default: {}}
+  components: {
+    C,
   },
-  props: ['foo'],
+  inheritAttrs: true,
+  props: ['name'], // 接受父组件传递的数据
   data() {
     return {
-      BAttr: '123'
+      list: [{ name: 'Beige' }]
     }
-  },
-  mounted() {
-    console.log(this.$attrs)
-    console.log(this.A, '------------------->B')
   },
   methods: {
-    blurHanlde() {
-      console.log('B组件监听到了')
+    clickHandler(item, $i, e) {
+      // console.log(item, $i, e)
+      this.$attrs.foo = '11111111111'
+      console.log(this.$listeners, this.$attrs)
+      // 向父组件传递数据
+      this.$emit('handlerClick', { item, index: $i, event: e })
+      // this.$emit('handlerClick')
     },
-    clickTextHandle($e) {
-      const p = { name: 123 }
-      console.log($e)
-      const obj = { ev: $e, p }
-      this.$emit('clickTextHandle', obj)
-    }
   }
 }
 </script>

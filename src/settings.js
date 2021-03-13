@@ -1,6 +1,7 @@
 module.exports = {
   title: '电子书管理系统',
-
+  // 检测token过去类型 0为跳转401页面  1为弹框提示
+  checkTokenType: 0,
   /**
    * @type {boolean} true | false
    * @description Whether show the settings right-panel
@@ -8,8 +9,8 @@ module.exports = {
   showSettings: false,
 
   /**
-   * @type {boolean} true | false
-   * @description Whether need tagsView
+   * @type {boolean} true | false 默认 flase单标签
+   * @description 标签视图模式 true: 多标签路由页面
    */
   tagsView: true,
 

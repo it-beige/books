@@ -5,6 +5,7 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
+  // 根据环境变量获取不同的请求地址
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: 5000 * 2
 })
@@ -29,7 +30,7 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
-    if (res.code !== 20000) {
+    if (res.code !== 200) {
       const errMsg = res.msg || '请求失败'
       Message({
         message: errMsg,

@@ -1,4 +1,5 @@
 import Layout from '@/layout'
+import TestG from '../views/testG/A'
 
 const routes = [
   {
@@ -15,7 +16,8 @@ const routes = [
           icon: 'el-icon-s-opportunity',
           roles: ['admin'],
         },
-        component: () => import('@/views/testG/A')
+        component: () => import('@/views/testG/A'),
+        // component: TestG
       },
     ]
   },

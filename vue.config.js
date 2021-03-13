@@ -14,6 +14,8 @@ const name = defaultSettings.title || '电子书管理系统' // page title
 // You can change the port by the following method:
 // port = 9527 npm run dev OR npm run dev --port = 9527
 const port = process.env.port || process.env.npm_config_port || 9527 // dev port
+// 默认发布路径修改
+const publicPath = process.env.NODE_ENV === 'production' ? './' : `/`
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -24,8 +26,8 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  publicPath: '/',
-  outputDir: 'dist',
+  publicPath,
+  outputDir: 'book-admin',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: process.env.NODE_ENV === 'development',
@@ -45,7 +47,7 @@ module.exports = {
       //   }
       // },
       [process.env.VUE_APP_BASE_API]: {
-        target: 'https://localhost:18082',
+        target: process.env.VUE_APP_PROXY_SERVER,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
@@ -55,6 +57,11 @@ module.exports = {
     // before: require('./mock/mock-server.js') => 不使用mock数据
   },
   configureWebpack: { // source-map
+    output: {
+      library: `${name}-[name]`,
+      libraryTarget: 'umd', // 把子应用打包成 umd 库格式
+      jsonpFunction: `webpackJsonp_${name}`
+    },
     devtool: process.env.NODE_ENV === 'development' ? 'source-map' : undefined,
     name: name,
     resolve: {

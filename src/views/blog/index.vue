@@ -1,5 +1,6 @@
 <template>
   <div class="blog-article">
+    <SlotTest name="1">1</SlotTest>
     <ul>
       <li
         v-for="(item, index) in blogArticleList"
@@ -9,24 +10,18 @@
         <a :href="item.link" target="_blank">{{ item.title }}</a>
       </li>
     </ul>
-    <div class="plan">
-      <DynamicForm
-        ref="pageForm"
-        v-model="formModel"
-        label-width="130px"
-        :form-config="baseFormConfig"
-        :show-btn="false"
-      />
-    </div>
-
   </div>
 </template>
 
 <script>
 import blogArticleList from '@/mixins/blogArticleList'
+import SlotTest from './slot.vue'
 export default {
   name: 'Blog',
-  mixins: [blogArticleList],
+  components: {
+    SlotTest
+  },
+  mixins: [blogArticleList]
 }
 </script>
 
