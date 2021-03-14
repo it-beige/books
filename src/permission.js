@@ -1,7 +1,7 @@
 import router from './router'
 import store from './store'
 import { Message } from 'element-ui'
-import { getToken, closeLoading } from '@/utils/auth' // get token from cookie
+import { getLoginData, closeLoading } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 import NProgress from 'nprogress'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
@@ -12,20 +12,14 @@ const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   start()
-
   // set page title
   document.title = getPageTitle(to.meta.title)
-  console.log(to, from)
-
-  // if (to.query && to.query.code) {
-  //   const res = await store.dispatch('user/thirdpartLogin', to.query.code)
-  //   console.log(res)
-  // }
 
   // determine whether the user has logged in
-  const hasToken = getToken()
+  const { token, appid } = getLoginData(to)
 
-  if (hasToken) {
+  // 需同时校验token,appid
+  if (token && appid) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })

@@ -29,7 +29,6 @@ export function showSuccess(msg, ...options) {
 export function showError(msg, ...options) {
   // 如果传递了配置项实用自定义的配置项
   Tip('error', msg, { ...options })
-  throw new Error(msg)
 }
 
 export function showWarning(msg, ...options) {

@@ -35,7 +35,6 @@ const r = require.context('./components/common', true, /\.vue$/)
 r.keys().forEach(path => {
   const filePath = path.substr(2)
   const module = require('./components/common/' + filePath)
-  // console.log(module.default)
   Vue.component(module.default.name, module.default)
 })
 import '@/components/common/EditDataTable'

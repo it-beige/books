@@ -1,19 +1,22 @@
 import { login, thirdpartLogin, logout, getInfo, getCode } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, getAppId, setAppId } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
+  appid: getAppId(),
   name: '',
   avatar: '',
   introduction: '',
-  authType: '',
   roles: []
 }
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  SET_APPID: (state, appid) => {
+    state.appid = appid
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
@@ -27,9 +30,6 @@ const mutations = {
   SET_ROLES: (state, roles) => {
     state.roles = roles
   },
-  SET_AUTH_TYPE: (state, thirdpartType) => {
-    state.authType = thirdpartType
-  },
 }
 
 const actions = {
@@ -39,8 +39,11 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
         setToken(data.token)
+        setAppId(data.appid)
+        commit('SET_TOKEN', data.token)
+        commit('SET_APPID', data.appid)
+
         resolve()
       }).catch(error => {
         reject(error)
@@ -51,11 +54,11 @@ const actions = {
   thirdpartLogin({ commit }, params) {
     return new Promise((resolve, reject) => {
       thirdpartLogin(params).then(response => {
-        console.log(response)
         const { data } = response
         // 重复登录的情况下gitHub不会再次响应数据
         commit('SET_TOKEN', data.token)
         setToken(data.token)
+        setAppId(data.appid)
         commit('SET_ROLES', data.roles || data.role)
         commit('SET_NAME', data.name || data.username)
         commit('SET_AVATAR', data.avatar)

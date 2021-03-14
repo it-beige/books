@@ -1,6 +1,6 @@
 <template>
   <div class="blog-article">
-    <SlotTest name="1">1</SlotTest>
+    <!-- <SlotTest>{{ 1 }}</SlotTest>  插槽可以写默认内容-->
     <ul>
       <li
         v-for="(item, index) in blogArticleList"
@@ -19,7 +19,7 @@ import SlotTest from './slot.vue'
 export default {
   name: 'Blog',
   components: {
-    SlotTest
+    // SlotTest
   },
   mixins: [blogArticleList]
 }
