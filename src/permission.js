@@ -16,7 +16,7 @@ router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
 
   // determine whether the user has logged in
-  const { token, appid } = getLoginData(to)
+  const { token, appid } = getLoginData()
 
   // 需同时校验token,appid
   if (token && appid) {
@@ -27,7 +27,7 @@ router.beforeEach(async(to, from, next) => {
     } else {
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      if (hasRoles) {
+      if (hasRoles && appid) {
         next()
       } else {
         try {
@@ -35,7 +35,12 @@ router.beforeEach(async(to, from, next) => {
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
           const { roles } = await store.dispatch('user/getInfo')
           // generate accessible routes map based on roles
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          let accessRoutes = []
+          if (roles.includes('test')) {
+            accessRoutes = await store.dispatch('permission/testRoutes', { roles, appid })
+          } else {
+            accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          }
 
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)

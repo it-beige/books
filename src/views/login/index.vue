@@ -141,8 +141,8 @@ export default {
         ]
       },
       loginForm: {
-        username: 'admin',
-        password: 'admin',
+        username: 'test',
+        password: 'test',
         identifyingCode: '',
       },
       bgImg: require('@/assets/login/bg.png'),

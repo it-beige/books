@@ -1,17 +1,22 @@
 import { login, thirdpartLogin, logout, getInfo, getCode } from '@/api/user'
-import { getToken, setToken, removeToken, getAppId, setAppId } from '@/utils/auth'
+import { getToken, setToken, removeToken, removeAppId, getAppId, setAppId } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
-
-const state = {
-  token: getToken(),
-  appid: getAppId(),
-  name: '',
-  avatar: '',
-  introduction: '',
-  roles: []
+const getDefaultState = () => {
+  return {
+    token: getToken(),
+    appid: getAppId(),
+    name: '',
+    avatar: '',
+    introduction: '',
+    roles: []
+  }
 }
+const state = getDefaultState()
 
 const mutations = {
+  RESET_STATE: (state) => {
+    Object.assign(state, getDefaultState())
+  },
   SET_TOKEN: (state, token) => {
     state.token = token
   },
@@ -112,10 +117,10 @@ const actions = {
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        removeToken()
+        removeToken() // must remove  token  first
+        removeAppId()
         resetRouter()
+        commit('RESET_STATE')
 
         // reset visited views and cached views
         // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
@@ -131,9 +136,8 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
-      commit('SET_TOKEN', '')
-      commit('SET_ROLES', [])
       removeToken()
+      commit('RESET_STATE')
       resolve()
     })
   },

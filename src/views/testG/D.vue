@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  /* eslint-disable */
   name: '',
   components: {},
   data() {
@@ -43,7 +44,7 @@ export default {
 
       function compareObjVal(obj1, obj2) {
         for (const attr in obj1) {
-          if (!obj1.hasOwnProperty(attr)) return
+          if (!Object.prototype.hasOwnProperty.call(obj1, attr)) return
           const a1 = isObject(obj1[attr])
           const a2 = isObject(obj2[attr])
           const arr1 = isArray(obj1)

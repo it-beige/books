@@ -1,4 +1,7 @@
 import { asyncRoutes, constantRoutes } from '@/router'
+import loadRouter from '@/router/loadRouter'
+
+import { getUserFuncList } from '@/api/user'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -47,6 +50,21 @@ const mutations = {
 }
 
 const actions = {
+  testRoutes({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      // 通过appid标识和角色来获取职能对应的路由表
+      getUserFuncList(params).then(response => {
+        let accessedRoutes = loadRouter.build(response.data) || []
+        // 加入默认需要同步路由
+        accessedRoutes = accessedRoutes.concat(asyncRoutes)
+        commit('SET_ROUTES', accessedRoutes)
+        resolve(accessedRoutes)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes

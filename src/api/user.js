@@ -8,7 +8,7 @@ export function login(data) {
   })
 }
 
-// 第三放登录
+// 第三方登录
 export function thirdpartLogin(params) {
   return request({
     url: 'user/thirdpart/login',
@@ -38,5 +38,17 @@ export function logout() {
   return request({
     url: 'user/logout',
     method: 'post'
+  })
+}
+
+/**
+ * 获取用户功能权限列表
+ * @param {Object} params
+ */
+export function getUserFuncList(data) {
+  return request({
+    url: `user/route`,
+    method: 'post',
+    data
   })
 }

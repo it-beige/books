@@ -24,6 +24,10 @@ export function getAppId() {
   return appid
 }
 
+export function removeAppId() {
+  return Cookies.remove(APP_ID_KEY)
+}
+
 // 清除首屏加载的loading
 export function closeLoading() {
   const loading = document.getElementById('app-loading')
@@ -33,7 +37,7 @@ export function closeLoading() {
 }
 
 // 获取用户 token & appid
-export function getLoginData(to) {
+export function getLoginData() {
   return {
     token: getToken(),
     appid: getAppId()

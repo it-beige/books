@@ -77,6 +77,19 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/404'),
     hidden: true
   },
+  {
+    path: '/example',
+    component: Layout,
+    name: 'example',
+    children: [
+      {
+        meta: { title: '个人博客', icon: 'link' },
+        path: 'example/index',
+        component: () => import('@/example/components/ComponentsDemo/index.vue'),
+      }
+    ]
+
+  },
 ]
 
 /* 动态加载路由，根据权限设定来加载，和管理系统的侧边栏对应 */
