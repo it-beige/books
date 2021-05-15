@@ -255,6 +255,7 @@ export default {
 
       // 将数每行格式化成想要的数据值
       const formatData = formatJson(cols, data)
+      console.log(formatData)
 
       // 合计计算
       const totalObj = calcArrayTotal(
