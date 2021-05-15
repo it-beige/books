@@ -3,7 +3,6 @@
     <el-upload
       class="upload-wrapper"
       :action="fileUrl"
-      v-on="$listeners"
       v-bind="$attrs"
       :headers="uploadHeaders"
       :show-file-list="showFileList"
@@ -11,12 +10,12 @@
       :list-type="listType"
       :before-upload="beforeFileUpload"
       :on-success="handleSuccess"
+      v-on="$listeners"
     >
-      <slot name="uploadBtn" v-if="$scopedSlots.uploadBtn">
-      </slot>
+      <slot v-if="$scopedSlots.uploadBtn" name="uploadBtn" />
       <el-button v-else size="small" type="primary">点击上传</el-button>
     </el-upload>
- </div>
+  </div>
 </template>
 
 <script>
@@ -27,11 +26,6 @@ export default {
   name: 'ImgUpload',
   components: {
 
-  },
-  data() {
-    return {
-      uploadHeaders: {} // 请求头
-    }
   },
   props: {
     headers: {
@@ -54,10 +48,15 @@ export default {
       type: Boolean,
       default: false
     },
-     size: {
+    size: {
       type: Number,
       default: 100
     },
+  },
+  data() {
+    return {
+      uploadHeaders: {} // 请求头
+    }
   },
   data() {
     return {
@@ -69,12 +68,12 @@ export default {
     ...mapGetters(['token'])
   },
   created() {
-    this.uploadHeaders = Object.assign(this.headers, { 
+    this.uploadHeaders = Object.assign(this.headers, {
       'X-Realm': process.env.VUE_APP_REALMCODE,
       'X-Ldp-Token': getToken()
     })
     if (this.url && typeof this.url === 'string') {
-      if (this.url.startsWith('http')) return;
+      if (this.url.startsWith('http')) return
       this.fileUrl = process.env.VUE_APP_BASE_API + this.url
     }
   },
@@ -101,15 +100,15 @@ export default {
 
     async handleSuccess(response, file, fileList) {
       if (response.code === 200) {
-        this.$message.success("上传成功")
+        this.$message.success('上传成功')
       } else {
-        this.$message.error("上传失败")
+        this.$message.error('上传失败')
       }
 
-      this.$emit('onSuccess', {response, file, fileList})
+      this.$emit('onSuccess', { response, file, fileList })
     }
   }
-} 
+}
 </script>
 
 <style scoped lang="scss">

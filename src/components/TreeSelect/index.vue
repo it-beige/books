@@ -40,6 +40,8 @@
 </template>
 
 <script>
+/* eslint-disable */
+
 export default {
   name: 'TreeSelect',
   // 设置绑定参数

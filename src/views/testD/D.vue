@@ -4,6 +4,8 @@
 
 <script>
 export default {
+/* eslint-disable */
+
   name: '',
   components: {},
   data() {

@@ -1,6 +1,7 @@
 <template>
   <div class="blog-article">
     <!-- <SlotTest>{{ 1 }}</SlotTest>  插槽可以写默认内容-->
+    
     <ul>
       <li
         v-for="(item, index) in blogArticleList"
@@ -15,6 +16,8 @@
 
 <script>
 import blogArticleList from '@/mixins/blogArticleList'
+/* eslint-disable */
+
 import SlotTest from './slot.vue'
 export default {
   name: 'Blog',
@@ -26,7 +29,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import 'styles/variables';
+@import '@styles/variables';
 
 .blog-article {
   display: flex;

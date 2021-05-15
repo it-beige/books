@@ -1,17 +1,17 @@
 <template>
   <div class="empty-data">
-    <i class="iconfont iconmeiyougengduo"></i>
+    <i class="iconfont iconmeiyougengduo" />
     <div class="text">暂无数据...</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "",
+  name: '',
   data() {
-    return {};
+    return {}
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

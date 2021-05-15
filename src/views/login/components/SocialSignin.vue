@@ -17,14 +17,14 @@
       <span class="baidu-svg-container"><svg-icon icon-class="baidu" class="icon baidu" /></span>
       百度
     </div>
-    <div class="sign-btn" @click="wechatHandleClick('oschina')">
+    <div v-if="false" class="sign-btn" @click="oschinaHandleClick('oschina')">
       <span class="oschina-svg-container"><svg-icon icon-class="oschina" class="icon oschina" /></span>
     </div>
   </div>
 </template>
 
 <script>
-import openWindow from '@/utils/open-window'
+// import openWindow from '@/utils/open-window'
 
 export default {
   name: 'SocialSignin',
@@ -69,7 +69,12 @@ export default {
       //   '_blank',
       //   'toolbar=no,width=800, height=600'
       // )
-    }
+    },
+    oschinaHandleClick(thirdpart) {
+      // 暂时还没有
+      // 准备参数
+
+    },
   }
 }
 </script>

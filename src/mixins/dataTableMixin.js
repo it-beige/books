@@ -1,5 +1,7 @@
 /* eslint-disable */
 import {initData} from "@/api/dataTable";
+import { requestUrl } from '@/api/constant'
+
 const DEFAULT_PAGE = 1
 const DataTableMixin = {
   data() {
@@ -12,7 +14,16 @@ const DataTableMixin = {
       loading: false, // 是否在加载数据
       list: [], // 数据列表
       total: 0,
-      _dataField: null
+      _dataField: null,
+      projectSelectOption: {
+        url: requestUrl.getProjectList,
+        props: {label: 'proName',value: 'id'},
+        params: {status: 1, pageSize: 1000, pageIndex: 1},
+        searchKey: "projectName",
+        clearable: true,
+        filterable: true
+      }
+      
     }
   },
   methods: {
@@ -53,11 +64,6 @@ const DataTableMixin = {
             this.total = res.data.totalCount
           } else if (res.data instanceof Array && res.data.length) {
             this.list = res.data
-            // this.list.forEach(item => {
-            //   res.data.forEach(ele => {
-            //    item.typeName = ele.dicTypeInfo.typeName
-            //   });
-            // });
           } else {
             this.list = []
           }

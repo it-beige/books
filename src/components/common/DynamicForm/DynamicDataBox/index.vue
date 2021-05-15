@@ -84,6 +84,7 @@
 import DragDialog from '@/components/DragDialog'
 import DynamicSearch from '@/components/common/DynamicSearch'
 import DataTableMixin from '@/mixins/DataTableMixin'
+/* eslint-disable */
 export default {
   name: 'DynamicDataBox',
   components: {

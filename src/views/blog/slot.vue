@@ -1,4 +1,3 @@
-
 <script>
 export default {
   name: 'Header',
@@ -12,7 +11,6 @@ export default {
     }
   },
   render(h, props) {
-    console.log(this)
     return h('div', {
       domProps: {
         innerHTML: this.$attrs.name

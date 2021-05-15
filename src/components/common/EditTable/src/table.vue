@@ -147,6 +147,7 @@ import { deepClone } from './util'
 import Sortable from 'sortablejs'
 import { MessageBox, Message } from 'element-ui'
 import NoData from '@/components/nodata'
+/* eslint-disable */
 
 export default {
   name: 'Table',

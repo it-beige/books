@@ -7,6 +7,8 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
+
 import C from './C'
 export default {
   name: 'B',

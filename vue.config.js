@@ -39,20 +39,21 @@ module.exports = {
       errors: true
     },
     proxy: {
-      // '^api': {
-      //   target: 'http://mall-pre.springboot.cn',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     '/api': ''
-      //   }
-      // },
+      [`${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_TEST_COMPONENTS_API}`]: {
+        target: process.env.VUE_TEST_COMPONENTS_PROXY_SERVER,
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
+      },
       [process.env.VUE_APP_BASE_API]: {
         target: process.env.VUE_APP_PROXY_SERVER,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
-      }
+      },
+
     }
     // before: require('./mock/mock-server.js') => 不使用mock数据
   },
@@ -67,12 +68,12 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src'),
-        'styles': resolve('src/styles'),
-        'components': resolve('src/components'),
-        'api': resolve('src/api'),
-        'utils': resolve('src/utils'),
-        'store': resolve('src/store'),
-        'router': resolve('src/router'),
+        '@styles': resolve('src/styles'),
+        '@components': resolve('src/components'),
+        '@api': resolve('src/api'),
+        '@utils': resolve('src/utils'),
+        '@store': resolve('src/store'),
+        '@router': resolve('src/router'),
       }
     }
   },

@@ -1,15 +1,15 @@
 <!--分割板-->
 <template>
-  <div :style="{height: mainContainerHeight + 'px'}" ref="mainContainer">
+  <div ref="mainContainer" :style="{height: mainContainerHeight + 'px'}">
     <split-pane split="vertical" :default-percent="defaultPercent">
       <template slot="paneL">
-        <div class="split-container" ref="leftContainer">
-          <slot name="left"></slot>
+        <div ref="leftContainer" class="split-container">
+          <slot name="left" />
         </div>
       </template>
       <template slot="paneR">
-        <div class="split-container" ref="rightContainer">
-          <slot name="right"></slot>
+        <div ref="rightContainer" class="split-container">
+          <slot name="right" />
         </div>
       </template>
     </split-pane>

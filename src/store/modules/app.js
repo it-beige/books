@@ -1,3 +1,4 @@
+
 import Cookies from 'js-cookie'
 
 const state = {
@@ -6,7 +7,7 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
-  size: Cookies.get('size') || 'medium'
+  size: Cookies.get('size') || 'small'
 }
 
 const mutations = {

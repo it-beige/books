@@ -2,3 +2,13 @@ build/*.js
 src/assets
 public
 dist
+src/views/blog/*.vue
+src/views/blog/testG/*.vue
+src/views/testA/*.vue
+src/views/testB/*.vue
+src/views/testC/*.vue
+src/views/testD/*.vue
+src/views/testE/*.vue
+src/views/testF/*.vue
+src/views/testG/*.vue
+src/components/common

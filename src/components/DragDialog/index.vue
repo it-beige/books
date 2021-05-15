@@ -37,7 +37,9 @@
 <script>
 import elDragDialog from '@/directive/el-drag-dialog'
 
+/* eslint-disable */
 export default {
+
   name: 'DragDialog',
   directives: {
     elDragDialog

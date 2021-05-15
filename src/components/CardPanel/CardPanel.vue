@@ -1,18 +1,16 @@
 <template>
   <el-card class="folded-panel-card">
-    <slot name="header" v-if="$slots.header" />
-    <div v-if="header" class="header-slot-wrapper" slot="header">
-      {{header}}
+    <slot v-if="$slots.header" name="header" />
+    <div v-if="header" slot="header" class="header-slot-wrapper">
+      {{ header }}
       <div class="right-tool-wrap">
-        <slot name="toolbar" v-if="$slots.toolbar" />
-        <div class="toolbar-btn-wrap" v-if="isAddShow">
+        <slot v-if="$slots.toolbar" name="toolbar" />
+        <div v-if="isAddShow" class="toolbar-btn-wrap">
           <div class="toolbar-btn">
-            <svg-icon icon-class="add" style="width: 100%; height: 100%" @click="licenseTableInsertRow" >
-            </svg-icon>
+            <svg-icon icon-class="add" style="width: 100%; height: 100%" @click="licenseTableInsertRow" />
           </div>
           <div class="toolbar-btn">
-            <svg-icon icon-class="remove" style="width: 100%; height: 100%" @click="licenseTableRemoveRow" >
-            </svg-icon>
+            <svg-icon icon-class="remove" style="width: 100%; height: 100%" @click="licenseTableRemoveRow" />
           </div>
         </div>
       </div>
@@ -42,10 +40,10 @@ export default {
   watch: {},
   methods: {
     licenseTableInsertRow() {
-      this.$emit('licenseTableInsertRow','')
+      this.$emit('licenseTableInsertRow', '')
     },
     licenseTableRemoveRow() {
-      this.$emit('licenseTableRemoveRow','')
+      this.$emit('licenseTableRemoveRow', '')
     }
   }
 }

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 
-import Cookies from 'js-cookie'
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 
 // 使用动画库
@@ -15,6 +14,8 @@ import VueElementExtends from 'vue-element-extends'
 import 'vue-element-extends/lib/index.css'
 Vue.use(VueElementExtends)
 
+process.env.VUE_APP_EDITOR2 = 'code'
+console.log(process.env)
 import '@/styles/index.scss' // global css
 
 import App from './App'
@@ -38,8 +39,9 @@ r.keys().forEach(path => {
   Vue.component(module.default.name, module.default)
 })
 import '@/components/common/EditDataTable'
+
 Vue.use(Element, {
-  size: Cookies.get('size') || 'medium', // set element-ui default size
+  size: store.getters.size, // set element-ui default size
 })
 
 Vue.prototype.$http = request

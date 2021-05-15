@@ -40,10 +40,10 @@
             @change="handleGroupFieldChange($event, item)"
           >
             <el-option
-              v-for="(field, index) in item.data"
-              :key="index"
+              v-for="(field) in item.data"
+              :key="field.field"
               :label="field.label"
-              :value="field.value"
+              :value="fieldfield"
             />
           </el-select>
         </el-input>
@@ -89,6 +89,7 @@
           :class="`filter-${item.type}`"
           :picker-options="item.datePickerOptions || datePickerOptions"
           :type="item.dateType"
+          :value-format="item.valueFormat?item.valueFormat:''"
           :clearable="item.clearable === false ? item.clearable : true"
           :disabled="item.disabled"
           :placeholder="getPlaceholder(item)"

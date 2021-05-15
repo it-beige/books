@@ -71,7 +71,6 @@ export default {
       type: String,
       default: `${process.env.VUE_APP_BASE_API}/file/download`
     },
-    fileType: String,
     headers: {
       type: Object,
       default: () => ({})
@@ -174,7 +173,7 @@ export default {
           responseType: 'arraybuffer',
           headers: {
             'X-Realm': process.env.VUE_APP_REALMCODE,
-				            'X-Ldp-Token': getToken(),
+				    'X-Ldp-Token': getToken(),
             filename: 'utf-8'
           }
         }).then(res => {

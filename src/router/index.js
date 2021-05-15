@@ -22,6 +22,10 @@ import login from './login'
 // import testF from './testF'
 /* G模块 */
 // import testG from './testG'
+/* 测试组件模块 */
+// import testComponents from './testComponents'
+/* 测试excel模块 */
+import testExcel from './testExcel'
 /* 电子书模块 */
 // import book from './book'
 
@@ -77,19 +81,6 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/404'),
     hidden: true
   },
-  {
-    path: '/example',
-    component: Layout,
-    name: 'example',
-    children: [
-      {
-        meta: { title: '个人博客', icon: 'link' },
-        path: 'example/index',
-        component: () => import('@/example/components/ComponentsDemo/index.vue'),
-      }
-    ]
-
-  },
 ]
 
 /* 动态加载路由，根据权限设定来加载，和管理系统的侧边栏对应 */
@@ -102,6 +93,8 @@ export const asyncRoutes = [
   // ...testE,
   // ...testF,
   // ...testG,
+  // ...testComponents,
+  ...testExcel,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

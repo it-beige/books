@@ -68,220 +68,9 @@ export default {
     showAdd: Boolean,
     checkSelect: {
       // 编辑执行前操作
-      type: Function
+      type: Function,
+      default: () => () => {}
     }
-  },
-  render(h) {
-      const _this = this
-    const columnRender = function(col, h) {
-      if (col.hidden === true) return null
-      if (!Object.prototype.hasOwnProperty.call(col, 'children') || col.children.length === 0) {
-        if (col.hidden === true) return null
-        return h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
-          props: {
-            ...col,
-            width: col.width ? col.width.toString() : null,
-            minWidth: col.minWidth ? col.minWidth.toString() : null,
-            showOverflowTooltip: _this.$scopedSlots[col.prop] ? false : col.showOverflowTooltip !== undefined ? col.showOverflowTooltip : _this.showOverflowTooltip
-          },
-          key: col.columnKey || col.prop,
-          scopedSlots: {
-            header: (props) => {
-              if (_this.$scopedSlots[col.prop + 'Header']) {
-                return h('div', [
-                  _this.$scopedSlots[col.prop + 'Header']({
-                    ...props
-                  })
-                ])
-              }
-            },
-            edit: (props) => {
-              if (_this.$scopedSlots[col.prop + 'Edit']) {
-                return h('div', [
-                  _this.$scopedSlots[col.prop + 'Edit']({
-                    ...props
-                  })
-                ])
-              }
-            },
-            default: (props) => {
-              if (_this.$scopedSlots[col.prop]) {
-                return h('div', [
-                  _this.$scopedSlots[col.prop]({
-                    ...props
-                  })
-                ])
-              } else {
-                return h('span', {
-                  style: col.cellStyle && typeof col.cellStyle === 'function'
-                    ? col.cellStyle(_this._renderCellValue(props.row, props.column.property), props.row, props.column) : null,
-                  domProps: {
-                    innerHTML: (col.formatter && typeof col.formatter === 'function')
-                      ? col.formatter(_this._renderCellValue(props.row, props.column.property), props.row, props.column, props.$index) : _this._renderCellValue(props.row, props.column.property)
-                  }
-                })
-              }
-            }
-          }
-        })
-      } else {
-        if (Array.isArray(col.children) && col.children.length) {
-          return h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
-            props: {
-              ...col,
-              width: col.width ? col.width.toString() : null,
-              minWidth: col.minWidth ? col.minWidth.toString() : null
-            },
-            attrs: {
-              label: col.label || col.prop
-            }
-          }, [...col.children.map(column => columnRender(column, h))]
-          )
-        }
-        console.error(`[ETable warn] children need Array and can't be empty`)
-        return null
-      }
-    }
-    return h('div', {
-      class: {
-        'data-table-container': true,
-        'no-pagination': _this.noPagination
-      }
-    }, [
-      h(_this.editable ? 'elx-editable' : 'elx-table', {
-        ref: 'elTable',
-        props: {
-          ...this.$attrs,
-          editConfig: this.$attrs.config,
-          rowKey: _this.rowKeyField,
-          rowClassName: _this._tableRowClassName,
-          height: _this.getTableHeight
-        },
-        on: {
-          ...this.$listeners,
-          'row-click': this._handleRowClick,
-          'selection-change': this._handleSelection
-        },
-        directives: [{
-          name: 'loading',
-          value: _this.$attrs.loading
-        }],
-        scopedSlots: {
-          empty: function() {
-            return _this.$slots.empty
-          },
-          append: function() {
-            return _this.$slots.append
-          }
-        }
-      },
-      [
-        _this.showSelection ? h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
-          props: {
-            selectable: _this._cumSelectable
-          },
-          attrs: {
-            type: 'selection',
-            align: 'center',
-            width: '60'
-          },
-        }) : null,
-        _this.showNumber ? h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
-          attrs: {
-            type: 'index',
-            label: _this.indexConfig.indexName,
-            align: 'center',
-            width: _this.indexConfig.indexWidth,
-            index: _this.indexConfig.indexMethod,
-          },
-          scopedSlots: {
-            header: (props) => {
-              if (_this.$scopedSlots['indexHeader']) {
-                return h('div', [
-                  _this.$scopedSlots['indexHeader']({
-                    ...props
-                  })
-                ])
-              }
-            },
-            default: (props) => {
-              if (_this.$scopedSlots['index']) {
-                return h('div', [
-                  _this.$scopedSlots['index']({
-                    ...props
-                  })
-                ])
-              }
-            }
-          }
-        }) : null,
-        _this.head.map(col => columnRender(col, h)),
-        !_this.getToolBar.hidden ? h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
-          props: {
-            ..._this.getToolBar,
-            width: _this.getToolBar.width ? _this.getToolBar.width.toString() : null,
-            minWidth: _this.getToolBar.minWidth ? _this.getToolBar.minWidth.toString() : null,
-            'class-name': 'tool-bar'
-          },
-          scopedSlots: _this.$scopedSlots.toolbar ? {
-            default: (props) => {
-              return h('div', [
-                _this.$scopedSlots.toolbar({
-                  ...props
-                })
-              ])
-            }
-          } : null
-        }) : null,
-        Object.keys(_this.$slots).map(i => {
-          return h('div', {
-            slot: i
-          }, _this.$slots[i])
-        })
-      ]),
-      _this.showAdd ? h('div', {
-        class: {
-          'add-row-container': true
-        },
-        on: {
-          click: _this.insertRow
-        }
-      },
-      [
-        h('i', {
-          class: {
-            'el-icon-circle-plus-outline': true
-          }
-        }),
-        h('el-button', {
-          attrs: {
-            type: 'text'
-          },
-          domProps: {
-            innerHTML: '新增行'
-          }
-        })
-      ]) : null,
-      _this.$attrs.total ? h('div', {
-        ref: 'pageContainer',
-        class: {
-          'page-container': true
-        }
-      }, [
-        h('el-pagination', {
-          attrs: {
-            layout: 'total, sizes, prev, pager, next, jumper',
-            pageSize: _this.$attrs.offset,
-            total: _this.$attrs.total
-          },
-          on: {
-            ...this.$listeners,
-            'current-change': _this._handlePageChange,
-            'size-change': _this._handleSizeChange
-          }
-        })
-      ]) : null
-    ])
   },
 
   data() {
@@ -417,10 +206,229 @@ export default {
         this.$refs.elTable.validate().then(() => {
           resolve(this.$attrs.data)
         }).catch(() => {
-          reject({props: this.$refs.elTable.getActiveRow(), msg:'校验失败'})
+          reject({ props: this.$refs.elTable.getActiveRow(), msg: '校验失败' })
         })
       })
     }
+  },
+  render(h) {
+    const _this = this
+    const columnRender = function(col, h) {
+      if (col.hidden === true) return null
+      if (!Object.prototype.hasOwnProperty.call(col, 'children') || col.children.length === 0) {
+        if (col.hidden === true) return null
+        return h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
+          props: {
+            ...col,
+            width: col.width ? col.width.toString() : null,
+            minWidth: col.minWidth ? col.minWidth.toString() : null,
+            showOverflowTooltip: _this.$scopedSlots[col.prop] ? false : col.showOverflowTooltip !== undefined ? col.showOverflowTooltip : _this.showOverflowTooltip
+          },
+          key: col.columnKey || col.prop,
+          scopedSlots: {
+            header: (props) => {
+              if (_this.$scopedSlots[col.prop + 'Header']) {
+                return h('div', [
+                  _this.$scopedSlots[col.prop + 'Header']({
+                    ...props
+                  })
+                ])
+              }
+            },
+            edit: (props) => {
+              if (_this.$scopedSlots[col.prop + 'Edit']) {
+                return h('div', [
+                  _this.$scopedSlots[col.prop + 'Edit']({
+                    ...props
+                  })
+                ])
+              }
+            },
+            default: (props) => {
+              if (_this.$scopedSlots[col.prop]) {
+                return h('div', [
+                  _this.$scopedSlots[col.prop]({
+                    ...props
+                  })
+                ])
+              } else {
+                return h('span', {
+                  style: col.cellStyle && typeof col.cellStyle === 'function'
+                    ? col.cellStyle(_this._renderCellValue(props.row, props.column.property), props.row, props.column) : null,
+                  domProps: {
+                    innerHTML: (col.formatter && typeof col.formatter === 'function')
+                      ? col.formatter({
+                        value: _this._renderCellValue(props.row, props.column.property), 
+                        row: props.row, 
+                        column: props.column, 
+                        $index: props.$index, 
+                        col, // 自己定义的列
+                      }) : _this._renderCellValue(props.row, props.column.property)
+                  }
+                })
+              }
+            }
+          }
+        })
+      } else {
+        if (Array.isArray(col.children) && col.children.length) {
+          return h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
+            props: {
+              ...col,
+              width: col.width ? col.width.toString() : null,
+              minWidth: col.minWidth ? col.minWidth.toString() : null
+            },
+            attrs: {
+              label: col.label || col.prop
+            }
+          }, [...col.children.map(column => columnRender(column, h))]
+          )
+        }
+        console.error(`[ETable warn] children need Array and can't be empty`)
+        return null
+      }
+    }
+    return h('div', {
+      class: {
+        'data-table-container': true,
+        'no-pagination': _this.noPagination
+      }
+    }, [
+      h(_this.editable ? 'elx-editable' : 'elx-table', {
+        ref: 'elTable',
+        props: {
+          ...this.$attrs,
+          editConfig: this.$attrs.config,
+          rowKey: _this.rowKeyField,
+          rowClassName: _this._tableRowClassName,
+          height: _this.getTableHeight
+        },
+        on: {
+          ...this.$listeners,
+          'row-click': this._handleRowClick,
+          'selection-change': this._handleSelection
+        },
+        directives: [{
+          name: 'loading',
+          value: _this.$attrs.loading
+        }],
+        scopedSlots: {
+          empty: function() {
+            return _this.$slots.empty
+          },
+          append: function() {
+            return _this.$slots.append
+          }
+        }
+      },
+      [
+        _this.showSelection ? h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
+          props: {
+            selectable: _this._cumSelectable
+          },
+          attrs: {
+            type: 'selection',
+            align: 'center',
+            width: '60'
+          },
+        }) : null,
+        _this.showNumber ? h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
+          attrs: {
+            type: 'index',
+            label: _this.indexConfig.indexName,
+            align: 'center',
+            width: _this.indexConfig.indexWidth,
+            index: _this.indexConfig.indexMethod,
+            ..._this.indexConfig,
+          },
+          scopedSlots: {
+            header: (props) => {
+              if (_this.$scopedSlots['indexHeader']) {
+                return h('div', [
+                  _this.$scopedSlots['indexHeader']({
+                    ...props
+                  })
+                ])
+              }
+            },
+            default: (props) => {
+              if (_this.$scopedSlots['index']) {
+                return h('div', [
+                  _this.$scopedSlots['index']({
+                    ...props
+                  })
+                ])
+              }
+            }
+          }
+        }) : null,
+        _this.head.map(col => columnRender(col, h)),
+        !_this.getToolBar.hidden ? h(_this.editable ? 'elx-editable-column' : 'elx-table-column', {
+          props: {
+            ..._this.getToolBar,
+            width: _this.getToolBar.width ? _this.getToolBar.width.toString() : null,
+            minWidth: _this.getToolBar.minWidth ? _this.getToolBar.minWidth.toString() : null,
+            'class-name': 'tool-bar'
+          },
+          scopedSlots: _this.$scopedSlots.toolbar ? {
+            default: (props) => {
+              return h('div', [
+                _this.$scopedSlots.toolbar({
+                  ...props
+                })
+              ])
+            }
+          } : null
+        }) : null,
+        Object.keys(_this.$slots).map(i => {
+          return h('div', {
+            slot: i
+          }, _this.$slots[i])
+        })
+      ]),
+      _this.showAdd ? h('div', {
+        class: {
+          'add-row-container': true
+        },
+        on: {
+          click: _this.insertRow
+        }
+      },
+      [
+        h('i', {
+          class: {
+            'el-icon-circle-plus-outline': true
+          }
+        }),
+        h('el-button', {
+          attrs: {
+            type: 'text'
+          },
+          domProps: {
+            innerHTML: '新增行'
+          }
+        })
+      ]) : null,
+      _this.$attrs.total ? h('div', {
+        ref: 'pageContainer',
+        class: {
+          'page-container': true
+        }
+      }, [
+        h('el-pagination', {
+          attrs: {
+            layout: 'total, sizes, prev, pager, next, jumper',
+            pageSize: _this.$attrs.offset,
+            total: _this.$attrs.total
+          },
+          on: {
+            ...this.$listeners,
+            'current-change': _this._handlePageChange,
+            'size-change': _this._handleSizeChange
+          }
+        })
+      ]) : null
+    ])
   }
 }
 </script>

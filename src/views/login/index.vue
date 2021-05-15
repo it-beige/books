@@ -252,7 +252,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'styles/variables.scss';
+@import '@styles/variables.scss';
 
 $bg: #2d3a4b;
 $dark_gray: #889aa4;
