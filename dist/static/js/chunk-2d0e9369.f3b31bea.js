@@ -1,1 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0e9369"],{"8d29":function(n,e,t){"use strict";t.r(e);var o=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",[n._v(" bookList ")])},a=[],c={name:"BookList",components:{},data:function(){return{}}},s=c,u=t("2877"),i=Object(u["a"])(s,o,a,!1,null,"a2e1f612",null);e["default"]=i.exports}}]);
