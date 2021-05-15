@@ -14,8 +14,6 @@ import VueElementExtends from 'vue-element-extends'
 import 'vue-element-extends/lib/index.css'
 Vue.use(VueElementExtends)
 
-process.env.VUE_APP_EDITOR2 = 'code'
-console.log(process.env)
 import '@/styles/index.scss' // global css
 
 import App from './App'
