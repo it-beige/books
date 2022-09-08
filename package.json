@@ -29,7 +29,7 @@
     "js-base64": "^2.6.4",
     "js-cookie": "2.2.0",
     "jsonlint": "1.6.3",
-    "jszip": "3.2.1",
+    "jszip": "3.7.0",
     "md5": "^2.3.0",
     "node-uuid": "^1.4.8",
     "normalize.css": "7.0.0",
